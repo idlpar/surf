@@ -1,0 +1,8 @@
+<x-head/>
+<x-nav-link/>
+
+<main class="py-auto">
+    @yield('content')
+</main>
+
+<x-footer/>

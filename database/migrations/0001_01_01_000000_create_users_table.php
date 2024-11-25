@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('utype')->default('user')->comment('Adming and User two type');
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->boolean('is_subscribed')->default(true);

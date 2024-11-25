@@ -1,12 +1,15 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\OtpController;
-use App\Http\Controllers\Auth\SocialController;
 use Illuminate\Http\Request;
+use App\Http\Middleware\AuthAdmin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +30,10 @@ Route::get('/test', function () {
 // Home Route (Only verified users can see this page)
 Route::get('/', function () {
     return view('home');
-})->middleware(['auth', 'verified'])->name('home');
+})->name('home');
+//Route::get('/', function () {
+//    return view('home');
+//})->middleware(['auth', 'verified'])->name('home');
 
 // Authentication Routes with Email Verification
 Auth::routes(['verify' => true]);
@@ -44,11 +50,13 @@ Auth::routes(['verify' => true]);
 
 // OTP Form Route (For users authenticated but not verified)
 Route::get('/otp', function () {
-    if (Auth::check() && !Auth::user()->hasVerifiedEmail()) {
+    // if (Auth::check() && !Auth::user()->hasVerifiedEmail()) {
+    if (Auth::check() && !Auth::hasVerifiedEmail()) {
         return view('auth.otp');
     }
     return redirect()->route('home');
 })->middleware('auth')->name('otp.form');
+
 
 // OTP Request Form (Password Reset)
 Route::get('password/otp', function (Request $request) {
@@ -78,6 +86,14 @@ Route::post('password/otp/verify', [OtpController::class, 'verifyPasswordResetOt
 
 // Home Route
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
+});
+
+Route::middleware(['auth', AuthAdmin::class])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+});
 
 // Social Login Routes
 Route::get('/login/{provider}', [SocialController::class, 'redirectToProvider'])->name('social.redirect');
