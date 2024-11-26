@@ -1,82 +1,23 @@
-{{--@if (session('status') || session('error'))--}}
-{{--    <div id="toast-message" class="fixed bottom-4 right-4 flex items-center p-4 max-w-xs border rounded-lg shadow-lg transition-transform transform-gpu translate-y-12 opacity-0"--}}
-{{--         style="z-index: 9999; transition: all 0.5s ease-in-out;">--}}
-{{--        <!-- Icon based on success or error -->--}}
-{{--        <div class="inline-flex items-center justify-center h-8 w-8 rounded-full text-white" id="toast-icon">--}}
-{{--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">--}}
-{{--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />--}}
-{{--            </svg>--}}
-{{--        </div>--}}
-
-{{--        <!-- Message -->--}}
-{{--        <div class="ml-3 text-sm font-semibold text-white" id="toast-message-text">--}}
-{{--            {{ session('status') ?? session('error') }}--}}
-{{--        </div>--}}
-
-{{--        <!-- Close Button -->--}}
-{{--        <button class="ml-auto text-white hover:text-gray-200 focus:outline-none focus:ring-0" id="toast-close">--}}
-{{--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">--}}
-{{--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />--}}
-{{--            </svg>--}}
-{{--        </button>--}}
-{{--    </div>--}}
-{{--@endif--}}
-
-{{--<script>--}}
-{{--    document.addEventListener('DOMContentLoaded', function () {--}}
-{{--        var toast = document.getElementById('toast-message');--}}
-{{--        var toastClose = document.getElementById('toast-close');--}}
-{{--        var toastIcon = document.getElementById('toast-icon');--}}
-
-{{--        // Apply gradient based on success or error--}}
-{{--        @if (session('status'))--}}
-{{--        toast.classList.add('bg-gradient-to-r', 'from-[#28a745]', 'via-[#218838]', 'to-[#1e7e34]');--}}
-{{--        @elseif (session('error'))--}}
-{{--        toast.classList.add('bg-gradient-to-r', 'from-[#dc3545]', 'via-[#c82333]', 'to-[#bd2130]');--}}
-{{--        toastIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;--}}
-{{--        @endif--}}
-
-{{--        // Show the toast with animation--}}
-{{--        setTimeout(function () {--}}
-{{--            toast.classList.remove('translate-y-12', 'opacity-0');--}}
-{{--            toast.classList.add('translate-y-0', 'opacity-100');--}}
-{{--        }, 200);--}}
-
-{{--        // Automatically hide the toast after 5 seconds--}}
-{{--        setTimeout(function () {--}}
-{{--            toast.classList.add('translate-y-full', 'opacity-0');--}}
-{{--        }, 5000);--}}
-
-{{--        // Completely hide or remove the toast after the transition (e.g., after 5.5 seconds)--}}
-{{--        setTimeout(function () {--}}
-{{--            toast.style.display = 'none'; // Optionally: toast.remove(); to completely remove from the DOM--}}
-{{--        }, 5500);--}}
-
-{{--        // Close toast on clicking the close button--}}
-{{--        toastClose.addEventListener('click', function () {--}}
-{{--            toast.classList.add('translate-y-full', 'opacity-0');--}}
-{{--            setTimeout(function () {--}}
-{{--                toast.style.display = 'none'; // Optionally: toast.remove();--}}
-{{--            }, 500); // Match the animation duration--}}
-{{--        });--}}
-{{--    });--}}
-{{--</script>--}}
-
-
-
 <hr class="mt-5 text-secondary" />
 <footer class="footer footer_type_2">
 <div class="footer-middle container">
     <div class="row row-cols-lg-5 row-cols-2">
         <div class="footer-column footer-store-info col-12 mb-4 mb-lg-0">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="{{ asset('images/logo.png') }}" alt="SurfsideMedia" class="max-w-[220px] d-block" />
+            <div class="logo flex items-center">
+                <a href=" {{ route('home') }}"  class="flex items-center">
+                    <img src="{{ asset('logos/tblue.svg') }}" alt="Tarpor" class="h-12 w-12" />
+                    <span class="ml-[-10px] text-2xl font-bold">
+                        <span class="text-indigo-600">a</span>
+                        <span class="text-red-500">r</span>
+                        <span class="text-green-500">p</span>
+                        <span class="text-blue-500">o</span>
+                        <span class="text-pink-500">r</span>
+                    </span>
                 </a>
             </div>
-            <p class="footer-address">123 Beach Avenue, Surfside City, CA 00000</p>
-            <p class="m-0"><strong class="fw-medium">contact@surfsidemedia.in</strong></p>
-            <p><strong class="fw-medium">+1 000-000-0000</strong></p>
+            <p class="footer-address">Uttara, Dhaka, 1230 </p>
+            <p class="m-0"><strong class="fw-medium">info@tarpor.com</strong></p>
+            <p><strong class="fw-medium">+88 0155-180-5527</strong></p>
 
             <ul class="social-links list-unstyled d-flex flex-wrap mb-0">
                 <li>
