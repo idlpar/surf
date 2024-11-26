@@ -6,22 +6,23 @@
         <!-- Card for Login Form -->
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md space-y-6 transform transition-all duration-500 hover:shadow-2xl">
 
-            <!-- Reuse Logo Component -->
+            <!-- Logo Component -->
             <x-logo />
 
             <!-- Sign In Header -->
             <x-card-header class="text-2xl font-bold text-gray-800 text-center">{{ __('Sign in to your account') }}</x-card-header>
 
-            <!-- Reuse Form Component -->
+            <!-- Login Form -->
             <x-form :action="route('login')">
+                <!-- Email Field -->
                 <x-input
-                type="email"
-                name="email"
-                label="Email address"
-                :value="old('email')"
-                placeholder="Enter your email"
-                autocomplete="email"
-                required
+                    type="email"
+                    name="email"
+                    label="Email address"
+                    :value="old('email')"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
                     :errors="$errors"
                 />
 
@@ -35,7 +36,6 @@
                     required
                     :errors="$errors"
                 />
-
 
                 <!-- Remember Me and Forgot Password -->
                 <div class="flex items-center justify-between text-gray-600 mt-4">
