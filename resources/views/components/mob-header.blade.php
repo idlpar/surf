@@ -8,7 +8,7 @@
         </a>
 
         <div class="logo">
-            <a href="index.html">
+            <a href="{{ route('home') }}">
                 <img src="{{ asset('images/logo.png') }}" alt="Uomo" class="max-w-[220px] d-block" />
             </a>
         </div>

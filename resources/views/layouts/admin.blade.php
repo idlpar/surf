@@ -161,7 +161,7 @@
                                 <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
                                     @csrf
                                 </form>
-                                <a href="#"
+                                <a href="logout"
                                    class="logout-link"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <div class="icon"><i class="icon-log-out"></i></div>
@@ -278,8 +278,7 @@
                                                     </div>
                                                     <div class="flex items-center justify-between gap20 flex-grow">
                                                         <div class="name">
-                                                            <a href="product-list.html" class="body-text">Kristin
-                                                                Watson</a>
+                                                            <a href="product-list.html" class="body-text">Parvez Ahmed                                                          Watson</a>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -399,7 +398,7 @@
                                                     <img src="{{ asset('images/avatar/user-1.png') }}" alt="">
                                                 </span>
                                                 <span class="flex flex-column">
-                                                    <span class="body-title mb-2">Kristin Watson</span>
+                                                    <span class="body-title mb-2">Parvez Ahmed</span>
                                                     <span class="text-tiny">Admin</span>
                                                 </span>
                                             </span>
