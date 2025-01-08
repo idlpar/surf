@@ -13,16 +13,19 @@
             <x-form :action="route('register')">
 
                 <!-- Name Field -->
-                <x-input type="text" name="name" label="Name" :value="old('name')" placeholder="Enter your name" required />
+                <x-input type="text" name="name" label="Name" :value="old('name')" placeholder="Enter your name" required :errors="$errors" />
+
+                <!-- Mobile Number  -->
+                <x-input type="text" name="mobile" label="Mobile Number" :value="old('mobile')" placeholder="Enter your mobile number" required :errors="$errors" />
 
                 <!-- Email Address Field -->
-                <x-input type="email" name="email" label="Email Address" :value="old('email')" placeholder="Enter your email" required />
+                <x-input type="email" name="email" label="Email Address" :value="old('email')" placeholder="Enter your email" required :errors="$errors" />
 
                 <!-- Password Field -->
-                <x-input type="password" name="password" label="Password" placeholder="Enter your password" required />
+                <x-input type="password" name="password" label="Password" placeholder="Enter your password" required :errors="$errors" />
 
                 <!-- Confirm Password Field -->
-                <x-input type="password" name="password_confirmation" label="Confirm Password" placeholder="Confirm your password" required />
+                <x-input type="password" name="password_confirmation" label="Confirm Password" placeholder="Confirm your password" required :errors="$errors" />
 
                 <!-- Terms and Conditions Checkbox -->
                 <div class="flex items-center space-x-2 mt-0">

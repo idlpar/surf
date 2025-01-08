@@ -48,10 +48,10 @@
 
     <!-- Include your stylesheets here -->
     @stack('styles')
-    <link rel="stylesheet" href="{{ asset('css/fonts.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('css/plugins/swiper.min.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/fonts.css') }}" type="text/css">
+        <link rel="stylesheet" href="{{ asset('css/plugins/swiper.min.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
 
 </head>
