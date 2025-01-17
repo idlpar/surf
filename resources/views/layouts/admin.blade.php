@@ -2,23 +2,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 
 <head>
-    <title>SurfsideMedia</title>
+    <title>TARPOR | Shop Online, Save Time</title>
     <meta charset="utf-8">
     <meta name="author" content="tarpor.com">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Scripts -->
+{{--    @vite(['resources/sass/app.scss', 'resources/css/app.css', 'resources/js/app.js'])--}}
+
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/animate.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/animation.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/bootstrap-select.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/adm/fonts.css') }}">
     <link rel="stylesheet" href="{{ asset('icon/style.css') }}" }>
     <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('images/favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/sweetalert.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/custom.css') }}">
+{{--    <link rel="stylesheet" href="{{ asset('css/adm/fonts.css') }}">--}}
+    @stack('styles')
 
-    @stack("styles")
+
 </head>
 
 <body class="body">
@@ -64,12 +69,12 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="sub-menu-item">
-                                        <a href="#" class="">
+                                        <a href="{{ route('admin.product.add') }}" class="">
                                             <div class="text">Add Product</div>
                                         </a>
                                     </li>
                                     <li class="sub-menu-item">
-                                        <a href="#" class="">
+                                        <a href="{{ route('admin.products') }}" class="">
                                             <div class="text">Products</div>
                                         </a>
                                     </li>
@@ -82,12 +87,12 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="sub-menu-item">
-                                        <a href="add-brand.html" class="">
+                                        <a href="{{ route('admin.brand.add') }}" class="">
                                             <div class="text">New Brand</div>
                                         </a>
                                     </li>
                                     <li class="sub-menu-item">
-                                        <a href="brands.html" class="">
+                                        <a href="{{ route('admin.brands') }}" class="">
                                             <div class="text">Brands</div>
                                         </a>
                                     </li>
@@ -100,12 +105,12 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="sub-menu-item">
-                                        <a href="add-category.html" class="">
+                                        <a href="{{ route('admin.category.add') }}" class="">
                                             <div class="text">New Category</div>
                                         </a>
                                     </li>
                                     <li class="sub-menu-item">
-                                        <a href="categories.html" class="">
+                                        <a href="{{ route('admin.categories') }}" class="">
                                             <div class="text">Categories</div>
                                         </a>
                                     </li>
@@ -180,9 +185,9 @@
                     <div class="wrap">
                         <div class="header-left">
                             <a href="index-2.html">
-                                <img class="" id="logo_header_mobile" alt="" src="{{ asset('images/logo.png') }}"
-                                     data-light="{{ asset('images/logo.png') }}" data-dark="{{ asset('images/logo.png') }}"
-                                     data-width="154px" data-height="52px" data-retina="{{ asset('images/logo.png') }}">
+                                <img class="" id="logo_header_mobile" alt="" src="{{ asset('images/logo/logo.png') }}"
+                                     data-light="{{ asset('images/logo/logo.png') }}" data-dark="{{ asset('images/logo/logo.png') }}"
+                                     data-width="154px" data-height="52px" data-retina="{{ asset('images/logo/logo.png') }}">
                             </a>
                             <div class="button-show-hide">
                                 <i class="icon-menu-left"></i>
@@ -463,7 +468,7 @@
 
 
                     <div class="bottom-page">
-                        <div class="body-text">Copyright © 2024 SurfsideMedia</div>
+                        <div class="body-text">Copyright © 2024 TARPOR</div>
                     </div>
                 </div>
 
@@ -479,103 +484,103 @@
 <script src="{{ asset('js/adm/apexcharts/apexcharts.js') }}"></script>
 <script src="{{ asset('js/adm/main.js') }}"></script>
 <script>
-    (function ($) {
+        (function ($) {
 
-        var tfLineChart = (function () {
+            var tfLineChart = (function () {
 
-            var chartBar = function () {
+                var chartBar = function () {
 
-                var options = {
-                    series: [{
-                        name: 'Total',
-                        data: [0.00, 0.00, 0.00, 0.00, 0.00, 273.22, 208.12, 0.00, 0.00, 0.00, 0.00, 0.00]
-                    }, {
-                        name: 'Pending',
-                        data: [0.00, 0.00, 0.00, 0.00, 0.00, 273.22, 208.12, 0.00, 0.00, 0.00, 0.00, 0.00]
-                    },
-                        {
-                            name: 'Delivered',
-                            data: [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+                    var options = {
+                        series: [{
+                            name: 'Total',
+                            data: [0.00, 0.00, 0.00, 0.00, 0.00, 273.22, 208.12, 0.00, 0.00, 0.00, 0.00, 0.00]
                         }, {
-                            name: 'Canceled',
-                            data: [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
-                        }],
-                    chart: {
-                        type: 'bar',
-                        height: 325,
-                        toolbar: {
-                            show: false,
+                            name: 'Pending',
+                            data: [0.00, 0.00, 0.00, 0.00, 0.00, 273.22, 208.12, 0.00, 0.00, 0.00, 0.00, 0.00]
                         },
-                    },
-                    plotOptions: {
-                        bar: {
-                            horizontal: false,
-                            columnWidth: '10px',
-                            endingShape: 'rounded'
-                        },
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    legend: {
-                        show: false,
-                    },
-                    colors: ['#2377FC', '#FFA500', '#078407', '#FF0000'],
-                    stroke: {
-                        show: false,
-                    },
-                    xaxis: {
-                        labels: {
-                            style: {
-                                colors: '#212529',
+                            {
+                                name: 'Delivered',
+                                data: [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+                            }, {
+                                name: 'Canceled',
+                                data: [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]
+                            }],
+                        chart: {
+                            type: 'bar',
+                            height: 325,
+                            toolbar: {
+                                show: false,
                             },
                         },
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    },
-                    yaxis: {
-                        show: false,
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function (val) {
-                                return "$ " + val + ""
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                columnWidth: '10px',
+                                endingShape: 'rounded'
+                            },
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        legend: {
+                            show: false,
+                        },
+                        colors: ['#2377FC', '#FFA500', '#078407', '#FF0000'],
+                        stroke: {
+                            show: false,
+                        },
+                        xaxis: {
+                            labels: {
+                                style: {
+                                    colors: '#212529',
+                                },
+                            },
+                            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        },
+                        yaxis: {
+                            show: false,
+                        },
+                        fill: {
+                            opacity: 1
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return "$ " + val + ""
+                                }
                             }
                         }
+                    };
+
+                    chart = new ApexCharts(
+                        document.querySelector("#line-chart-8"),
+                        options
+                    );
+                    if ($("#line-chart-8").length > 0) {
+                        chart.render();
                     }
                 };
 
-                chart = new ApexCharts(
-                    document.querySelector("#line-chart-8"),
-                    options
-                );
-                if ($("#line-chart-8").length > 0) {
-                    chart.render();
-                }
-            };
+                /* Function ============ */
+                return {
+                    init: function () { },
 
-            /* Function ============ */
-            return {
-                init: function () { },
+                    load: function () {
+                        chartBar();
+                    },
+                    resize: function () { },
+                };
+            })();
 
-                load: function () {
-                    chartBar();
-                },
-                resize: function () { },
-            };
-        })();
+            jQuery(document).ready(function () { });
 
-        jQuery(document).ready(function () { });
+            jQuery(window).on("load", function () {
+                tfLineChart.load();
+            });
 
-        jQuery(window).on("load", function () {
-            tfLineChart.load();
-        });
-
-        jQuery(window).on("resize", function () { });
-    })(jQuery);
-</script>
+            jQuery(window).on("resize", function () { });
+        })(jQuery);
+    </script>
+    @stack('scripts')
 </body>
-@stack('scripts')
 </html>

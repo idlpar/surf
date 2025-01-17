@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/custom.css') }}">
+@endpush
+
 @section('content')
     <div class="main-content-inner">
 
