@@ -1,18 +1,11 @@
-
+<hr class="mt-5 text-secondary" />
 <footer class="footer footer_type_2">
 <div class="footer-middle container">
     <div class="row row-cols-lg-5 row-cols-2">
         <div class="footer-column footer-store-info col-12 mb-4 mb-lg-0">
-            <div class="logo flex items-center">
-                <a href=" <?php echo e(route('home')); ?>"  class="flex items-center">
-                    <img src="<?php echo e(asset('logos/tblue.svg')); ?>" alt="Tarpor" class="h-12 w-12" />
-                    <span class="ml-[-10px] text-2xl font-bold">
-                        <span class="text-indigo-600">a</span>
-                        <span class="text-red-500">r</span>
-                        <span class="text-green-500">p</span>
-                        <span class="text-blue-500">o</span>
-                        <span class="text-pink-500">r</span>
-                    </span>
+            <div class="logo">
+                <a href="<?php echo e(route('home')); ?>">
+                    <img src="<?php echo e(asset('images/logo.png')); ?>" alt="TARPOR" class="logo__image d-block" style="margin-left: -10%;"  />
                 </a>
             </div>
             <p class="footer-address">Uttara, Dhaka, 1230 </p>
@@ -123,46 +116,21 @@
 </div>
 </footer>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<?php echo $__env->make('components.mob-footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <div id="scrollTop" class="visually-hidden end-0"></div>
 <div class="page-overlay"></div>
+
+<!-- JavaScript files -->
+<script src="<?php echo e(asset('js/plugins/jquery.min.js')); ?>"></script>
+<script src="<?php echo e(asset('js/plugins/bootstrap.bundle.min.js')); ?>"></script>
+<script src="<?php echo e(asset('js/plugins/bootstrap-slider.min.js')); ?>"></script>
+<script src="<?php echo e(asset('js/plugins/swiper.min.js')); ?>"></script>
+<script src="<?php echo e(asset('js/plugins/countdown.js')); ?>"></script>
+<script src="<?php echo e(asset('js/theme.js')); ?>"></script>
+
+<!-- Stack for pushing JavaScript files -->
+<?php echo $__env->yieldPushContent('scripts'); ?>
 
 
 <?php /**PATH D:\e-commerce\tarpor\resources\views/components/footer.blade.php ENDPATH**/ ?>

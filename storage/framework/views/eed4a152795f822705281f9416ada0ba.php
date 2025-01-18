@@ -1,9 +1,11 @@
+<?php echo $__env->make('components.mob-header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
 <header class="header header-fullwidth header-transparent-bg p-8">
     <div class="container">
         <div class="header-desk header-desk_type_1">
             <div class="logo"  class="flex items-center">
                     <a href="<?php echo e(route('home')); ?>"  class="flex items-center">
-                        <img src="<?php echo e(asset('images/logo.png')); ?>" alt="tarpor" class="max-w-[220px] d-block" />
+                        <img src="<?php echo e(asset('images/logo.png')); ?>" alt="tarpor" class="max-w-[220px] d-block" style="margin-left: -10%;" />
                     </a>
             </div>
 
@@ -13,7 +15,7 @@
                         <a href="<?php echo e(route('home')); ?>" class="navigation__link">Home</a>
                     </li>
                     <li class="navigation__item">
-                        <a href="shop.html" class="navigation__link">Shop</a>
+                        <a href="<?php echo e(route('shop.index')); ?>" class="navigation__link">Shop</a>
                     </li>
                     <li class="navigation__item">
                         <a href="cart.html" class="navigation__link">Cart</a>

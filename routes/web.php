@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use App\Http\Middleware\AuthAdmin;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +87,7 @@ Route::post('password/otp/verify', [OtpController::class, 'verifyPasswordResetOt
 
 // Home Route
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');

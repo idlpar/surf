@@ -1,18 +1,11 @@
-{{--<hr class="mt-5 text-secondary" />--}}
+<hr class="mt-5 text-secondary" />
 <footer class="footer footer_type_2">
 <div class="footer-middle container">
     <div class="row row-cols-lg-5 row-cols-2">
         <div class="footer-column footer-store-info col-12 mb-4 mb-lg-0">
-            <div class="logo flex items-center">
-                <a href=" {{ route('home') }}"  class="flex items-center">
-                    <img src="{{ asset('logos/tblue.svg') }}" alt="Tarpor" class="h-12 w-12" />
-                    <span class="ml-[-10px] text-2xl font-bold">
-                        <span class="text-indigo-600">a</span>
-                        <span class="text-red-500">r</span>
-                        <span class="text-green-500">p</span>
-                        <span class="text-blue-500">o</span>
-                        <span class="text-pink-500">r</span>
-                    </span>
+            <div class="logo">
+                <a href="{{ route('home') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="TARPOR" class="logo__image d-block" style="margin-left: -10%;"  />
                 </a>
             </div>
             <p class="footer-address">Uttara, Dhaka, 1230 </p>
@@ -123,45 +116,20 @@
 </div>
 </footer>
 
-
-{{--<footer class="footer-mobile container w-100 px-5 d-md-none bg-body">--}}
-{{--    <div class="row text-center">--}}
-{{--        <div class="col-4">--}}
-{{--            <a href="index.html" class="footer-mobile__link d-flex flex-column align-items-center">--}}
-{{--                <svg class="d-block" width="18" height="18" viewBox="0 0 18 18" fill="none"--}}
-{{--                     xmlns="http://www.w3.org/2000/svg">--}}
-{{--                    <use xlink:href="#icon_home" />--}}
-{{--                </svg>--}}
-{{--                <span>Home</span>--}}
-{{--            </a>--}}
-{{--        </div>--}}
-
-{{--        <div class="col-4">--}}
-{{--            <a href="index.html" class="footer-mobile__link d-flex flex-column align-items-center">--}}
-{{--                <svg class="d-block" width="18" height="18" viewBox="0 0 18 18" fill="none"--}}
-{{--                     xmlns="http://www.w3.org/2000/svg">--}}
-{{--                    <use href="#icon_hanger" />--}}
-{{--                </svg>--}}
-{{--                <span>Shop</span>--}}
-{{--            </a>--}}
-{{--        </div>--}}
-
-{{--        <div class="col-4">--}}
-{{--            <a href="index.html" class="footer-mobile__link d-flex flex-column align-items-center">--}}
-{{--                <div class="position-relative">--}}
-{{--                    <svg class="d-block" width="18" height="18" viewBox="0 0 20 20" fill="none"--}}
-{{--                         xmlns="http://www.w3.org/2000/svg">--}}
-{{--                        <use href="#icon_heart" />--}}
-{{--                    </svg>--}}
-{{--                    <span class="wishlist-amount d-block position-absolute js-wishlist-count">3</span>--}}
-{{--                </div>--}}
-{{--                <span>Wishlist</span>--}}
-{{--            </a>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</footer>--}}
+@include('components.mob-footer')
 
 <div id="scrollTop" class="visually-hidden end-0"></div>
 <div class="page-overlay"></div>
+
+<!-- JavaScript files -->
+<script src="{{ asset('js/plugins/jquery.min.js') }}"></script>
+<script src="{{ asset('js/plugins/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/plugins/bootstrap-slider.min.js') }}"></script>
+<script src="{{ asset('js/plugins/swiper.min.js') }}"></script>
+<script src="{{ asset('js/plugins/countdown.js') }}"></script>
+<script src="{{ asset('js/theme.js') }}"></script>
+
+<!-- Stack for pushing JavaScript files -->
+@stack('scripts')
 
 

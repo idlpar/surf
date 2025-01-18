@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
     <!-- Main Container -->
@@ -7,7 +7,6 @@
         <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-6">
 
             <!-- Reuse Logo Component -->
-            <x-logo />
 
             <!-- OTP Verification Header -->
             <x-card-header class="text-2xl font-bold text-gray-700">{{ __('Verify OTP') }}</x-card-header>

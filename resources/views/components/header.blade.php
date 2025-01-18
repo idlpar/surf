@@ -1,9 +1,11 @@
+@include('components.mob-header')
+
 <header class="header header-fullwidth header-transparent-bg p-8">
     <div class="container">
         <div class="header-desk header-desk_type_1">
             <div class="logo"  class="flex items-center">
                     <a href="{{ route('home') }}"  class="flex items-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="tarpor" class="max-w-[220px] d-block" />
+                        <img src="{{ asset('images/logo.png') }}" alt="tarpor" class="max-w-[220px] d-block" style="margin-left: -10%;" />
                     </a>
             </div>
 
@@ -13,7 +15,7 @@
                         <a href="{{ route('home') }}" class="navigation__link">Home</a>
                     </li>
                     <li class="navigation__item">
-                        <a href="shop.html" class="navigation__link">Shop</a>
+                        <a href="{{ route('shop.index') }}" class="navigation__link">Shop</a>
                     </li>
                     <li class="navigation__item">
                         <a href="cart.html" class="navigation__link">Cart</a>

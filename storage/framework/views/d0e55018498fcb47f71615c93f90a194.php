@@ -2,26 +2,6 @@
     <div class="min-h-screen flex justify-center items-center" style="background: radial-gradient(circle, rgba(248,244,243,1) 0%, rgba(243,234,229,1) 25%, rgba(218,233,244,1) 50%, rgba(227,242,230,1) 75%, rgba(224,239,234,1) 100%);">
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md space-y-6 transform transition-all duration-500 hover:shadow-2xl">
             <!-- Reuse Logo Component -->
-            <?php if (isset($component)) { $__componentOriginale7dc1b8cfba3f7c6278ef1986decdec2 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginale7dc1b8cfba3f7c6278ef1986decdec2 = $attributes; } ?>
-<?php $component = App\View\Components\Logo::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('logo'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\Logo::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginale7dc1b8cfba3f7c6278ef1986decdec2)): ?>
-<?php $attributes = $__attributesOriginale7dc1b8cfba3f7c6278ef1986decdec2; ?>
-<?php unset($__attributesOriginale7dc1b8cfba3f7c6278ef1986decdec2); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginale7dc1b8cfba3f7c6278ef1986decdec2)): ?>
-<?php $component = $__componentOriginale7dc1b8cfba3f7c6278ef1986decdec2; ?>
-<?php unset($__componentOriginale7dc1b8cfba3f7c6278ef1986decdec2); ?>
-<?php endif; ?>
 
             <!-- Card Header -->
             <?php if (isset($component)) { $__componentOriginal45b0c9ba26fcd16a79034c21758ffbac = $component; } ?>
@@ -219,4 +199,4 @@
     </div>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\e-commerce\tarpor\resources\views/auth/register.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.auth', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\e-commerce\tarpor\resources\views/auth/register.blade.php ENDPATH**/ ?>

@@ -2576,7 +2576,8 @@ progress {
   display: inline-block !important; }
 
 .d-block {
-  display: block !important; }
+  display: block !important;
+}
 
 .d-grid {
   display: grid !important; }
@@ -15539,3 +15540,12 @@ body.coming-soon-page {
     display: none; }
   .btn-video-player.playing svg.btn-pause {
     display: block; }
+
+#header {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.logo__image {
+    max-width: 220px;
+}

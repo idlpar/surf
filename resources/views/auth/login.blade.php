@@ -1,4 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.auth')
+
+@section('title', 'Login')
+
+{{--@push('styles')--}}
+{{--     @vite(['resources/sass/app.scss', 'resources/css/app.css', 'resources/js/app.js'])--}}
+{{--@endpush--}}
 
 @section('content')
     <!-- Main Container -->
@@ -7,7 +13,6 @@
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md space-y-6 transform transition-all duration-500 hover:shadow-2xl">
 
             <!-- Logo Component -->
-            <x-logo />
 
             <!-- Sign In Header -->
             <x-card-header class="text-2xl font-bold text-gray-800 text-center">{{ __('Sign in to your account') }}</x-card-header>

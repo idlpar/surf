@@ -1,10 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
     <div class="min-h-screen flex justify-center items-center" style="background: radial-gradient(circle, rgba(248,244,243,1) 0%, rgba(243,234,229,1) 25%, rgba(218,233,244,1) 50%, rgba(227,242,230,1) 75%, rgba(224,239,234,1) 100%);">
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md space-y-6 transform transition-all duration-500 hover:shadow-2xl">
             <!-- Reuse Logo Component -->
-            <x-logo />
 
             <!-- Card Header -->
             <x-card-header class="text-2xl font-bold text-gray-800 text-center">{{ __('Register Now!') }}</x-card-header>

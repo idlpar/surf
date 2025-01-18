@@ -9,7 +9,7 @@
 
         <div class="logo">
             <a href="{{ route('home') }}">
-                <img src="{{ asset('images/logo.png') }}" alt="Uomo" class="max-w-[220px] d-block" />
+                <img src="{{ asset('images/logo.png') }}" alt="Uomo" class="max-w-[220px] d-block" style="margin-left: -10%;" />
             </a>
         </div>
 
@@ -47,10 +47,10 @@
             <div class="overflow-hidden">
                 <ul class="navigation__list list-unstyled position-relative">
                     <li class="navigation__item">
-                        <a href="index.html" class="navigation__link">Home</a>
+                        <a href="{{ route('home') }}l" class="navigation__link">Home</a>
                     </li>
                     <li class="navigation__item">
-                        <a href="shop.html" class="navigation__link">Shop</a>
+                        <a href="{{ route('shop.index') }}" class="navigation__link">Shop</a>
                     </li>
                     <li class="navigation__item">
                         <a href="cart.html" class="navigation__link">Cart</a>
