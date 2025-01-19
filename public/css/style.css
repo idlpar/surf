@@ -10286,26 +10286,69 @@ textarea.form-control-lg {
 
 .pc__img-next,
 .pc__img-prev {
-  position: absolute;
-  top: 50%;
-  margin-top: -0.5rem;
-  color: #767676;
-  font-size: 1rem;
-  opacity: 0;
-  z-index: 1;
-  transition: opacity 0.35s;
-  width: 1rem;
-  text-align: center; }
-  .pc__img-next > svg,
-  .pc__img-prev > svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically using transform */
+    margin-top: 0; /* Remove negative margin */
+    color: #767676;
+    font-size: 1rem;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.35s;
+    width: 2.5rem; /* Increased width for larger clickable area */
+    height: 2.5rem; /* Add height for consistent clickable area */
+    display: flex; /* Align the icon properly */
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Optional: Circular shape for better UX */
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Visible background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow for depth */
+    cursor: pointer; /* Indicate interactivity */
+}
+
+.pc__img-next > svg,
+.pc__img-prev > svg {
     height: auto;
-    width: 0.625rem; }
+    width: 0.625rem;
+}
 
 .pc__img-next {
-  right: 1.25rem; }
+    right: 1rem; /* Adjust spacing from the edge */
+}
 
 .pc__img-prev {
-  left: 1.25rem; }
+    left: 1rem; /* Adjust spacing from the edge */
+}
+
+.pc__img-next:hover,
+.pc__img-prev:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Subtle hover effect */
+    color: #000; /* Optional: Change icon color on hover */
+}
+
+
+/*.pc__img-next,*/
+/*.pc__img-prev {*/
+/*  position: absolute;*/
+/*  top: 50%;*/
+/*  margin-top: -0.5rem;*/
+/*  color: #767676;*/
+/*  font-size: 1rem;*/
+/*  opacity: 0;*/
+/*  z-index: 1;*/
+/*  transition: opacity 0.35s;*/
+/*  width: 1rem;*/
+/*  text-align: center; }*/
+/*  .pc__img-next > svg,*/
+/*  .pc__img-prev > svg {*/
+/*    height: auto;*/
+/*    width: 0.625rem; }*/
+
+/*.pc__img-next {*/
+/*  right: 1.25rem; }*/
+
+/*.pc__img-prev {*/
+/*  left: 1.25rem; }*/
 
 .pc__info {
   margin-top: 1rem; }

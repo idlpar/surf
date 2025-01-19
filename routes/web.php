@@ -29,9 +29,9 @@ Route::get('/test', function () {
 });
 
 // Home Route (Only verified users can see this page)
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+//Route::get('/', function () {
+//    return view('home');
+//})->name('home');
 //Route::get('/', function () {
 //    return view('home');
 //})->middleware(['auth', 'verified'])->name('home');
@@ -88,6 +88,7 @@ Route::post('password/otp/verify', [OtpController::class, 'verifyPasswordResetOt
 // Home Route
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/shop/{product_slug}', [ShopController::class, 'product_details'])->name('shop.product.details');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');

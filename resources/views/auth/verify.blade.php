@@ -7,7 +7,7 @@
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md space-y-6 transform transition-all duration-500 hover:shadow-2xl">
 
             <!-- Reuse Logo Component -->
-     
+
             <!-- Verify Email Header -->
             <x-card-header class="text-2xl font-bold text-gray-800 text-center">{{ __('Verify Your Email Address') }}</x-card-header>
 

@@ -369,7 +369,7 @@
                                     <div class="swiper-wrapper">
                                         <!-- Main Product Image -->
                                         <div class="swiper-slide">
-                                            <a href="details.html">
+                                            <a href="{{ route('shop.product.details', ['product_slug' => $product->slug] ) }}">
                                                 <img
                                                     loading="lazy"
                                                     src="{{ asset('uploads/products/' . $product->image) }}"
@@ -380,10 +380,10 @@
                                             </a>
                                         </div>
 
-                                        <!-- Additional Product Images -->
+                                        <!-- Additional Gallery Product Images -->
                                         @foreach(json_decode($product->images, true) as $gim)
                                             <div class="swiper-slide">
-                                                <a href="details.html">
+                                                <a href="{{ route('shop.product.details', ['product_slug' => $product->slug] ) }}">
                                                     <img
                                                         loading="lazy"
                                                         src="{{ asset('uploads/products/gallery/' . trim($gim)) }}"
@@ -410,20 +410,14 @@
 
                             <div class="pc__info position-relative">
                                 <p class="pc__category">{{ $product->category->name }}</p>
-                                <h6 class="pc__title"><a href="details.html">{{ $product->name }}</a></h6>
+                                <h6 class="pc__title"><a href="{{ route('shop.product.details', ['product_slug' => $product->slug] ) }}">{{ $product->name }}</a></h6>
                                 <div class="product-card__price d-flex" style="align-items: center; gap: 8px;">
                                     <span class="money price" style="font-size: 1.2rem; font-weight: bold; color: #333;">
                                         @if($product->sale_price)
-                                            <span style="text-decoration: line-through; color: #999; margin-right: 5px;">
-                                                Tk. {{ number_format($product->regular_price, 0) }}
-                                            </span>
-                                            <span style="color: #e63946;">
-                                                Tk. {{ number_format($product->sale_price, 0) }}
-                                            </span>
+                                            <span style="text-decoration: line-through; color: #999; margin-right: 5px;">Tk. {{ number_format($product->regular_price, 0) }}</span>
+                                            <span style="color: #e63946;">Tk. {{ number_format($product->sale_price, 0) }}</span>
                                         @else
-                                            <span style="color: #333;">
-                                                Tk. {{ number_format($product->regular_price, 0) }}
-                                            </span>
+                                            <span style="color: #333;">Tk. {{ number_format($product->regular_price, 0) }}</span>
                                         @endif
                                     </span>
                                 </div>

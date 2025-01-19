@@ -27,7 +27,7 @@ return new class extends Migration
 //            $table->boolean('is_special')->default(false);
             $table->unsignedBigInteger('quantity')->default(0);
             $table->string('image')->nullable();
-            $table->text('images')->nullable();
+            $table->json('images')->nullable()->default('[]');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->timestamps();
