@@ -121,7 +121,36 @@
 <div id="scrollTop" class="visually-hidden end-0"></div>
 <div class="page-overlay"></div>
 
-<!-- JavaScript files -->
+<!-- Toast Message -->
+@if (session('success') || session('error'))
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+        <div
+            class="toast show align-items-center text-white border-0"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+            style="background-color: {{ session('success') ? '#28a745' : '#dc3545' }}; border-radius: 0.50rem; padding: 0.25rem; font-size: 1.125rem;"
+        >
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ session('success') ?? session('error') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    <!-- Auto-dismiss the toast after 3 seconds -->
+    <script>
+        setTimeout(() => {
+            const toast = document.querySelector('.toast');
+            if (toast) {
+                toast.classList.remove('show'); // Hide the toast
+            }
+        }, 3000); // 3000 ms = 3 seconds
+    </script>
+@endif
+
+<!-- JavaScript Files -->
 <script src="{{ asset('js/plugins/jquery.min.js') }}"></script>
 <script src="{{ asset('js/plugins/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/plugins/bootstrap-slider.min.js') }}"></script>
@@ -129,7 +158,4 @@
 <script src="{{ asset('js/plugins/countdown.js') }}"></script>
 <script src="{{ asset('js/theme.js') }}"></script>
 
-<!-- Stack for pushing JavaScript files -->
 @stack('scripts')
-
-
