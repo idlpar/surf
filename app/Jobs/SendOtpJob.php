@@ -2,11 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Mail\SendOtpMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
 
 class SendOtpJob implements ShouldQueue
 {
@@ -29,14 +31,7 @@ class SendOtpJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $subject = "Your OTP Code";
-        $message = "Your OTP is: {$this->otp}\nThis code will expire in 5 minutes.";
-
-        mail(
-            $this->email,
-            $subject,
-            $message,
-            "From: TARPOR | Shop Online, Save Time <info@tarpor.com>\r\n"
-        );
+        // Use Laravel's Mail class to send the OTP email
+        Mail::to($this->email)->send(new SendOtpMail($this->otp));
     }
 }
