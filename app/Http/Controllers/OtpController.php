@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendOtpJob;
 use App\Models\User;
 use App\Notifications\SendOtpNotification;
 use Carbon\Carbon;
@@ -89,8 +90,11 @@ class OtpController extends Controller
         $user->otp_expires_at = $otpExpiry;
         $user->save();
 
+        // Dispatch OTP job
+        SendOtpJob::dispatch($user->email, $otp);
+
         // Send the new OTP via notification
-        $user->notify(new SendOtpNotification($otp));
+//        $user->notify(new SendOtpNotification($otp));
 
         // Clear rate limiter
         RateLimiter::clear($this->throttleKey($request));
