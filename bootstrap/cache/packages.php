@@ -63,4 +63,15 @@
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
   ),
+  'surfsidemedia/shoppingcart' => 
+  array (
+    'aliases' => 
+    array (
+      'Cart' => 'Surfsidemedia\\Shoppingcart\\Facades\\Cart',
+    ),
+    'providers' => 
+    array (
+      0 => 'Surfsidemedia\\Shoppingcart\\ShoppingcartServiceProvider',
+    ),
+  ),
 );

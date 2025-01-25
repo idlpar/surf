@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use App\Http\Middleware\AuthAdmin;
@@ -86,9 +87,23 @@ Route::post('password/otp/verify', [OtpController::class, 'verifyPasswordResetOt
 */
 
 // Home Route
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+//Route::redirect('/', '/home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+//Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{product_slug}', [ShopController::class, 'product_details'])->name('shop.product.details');
+
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add_to_cart'])->name('cart.add');
+Route::post('/cart/increase/{rowId}', [CartController::class, 'increase_cart_quantity'])->name('cart.increase');
+Route::post('/cart/decrease/{rowId}', [CartController::class, 'decrease_cart_quantity'])->name('cart.decrease');
+Route::delete('/cart/remove/{rowId}', [CartController::class, 'remove_cart_item'])->name('cart.remove');
+Route::delete('/cart/clear', [CartController::class, 'empty_cart'])->name('cart.clear');
+
+
+
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
@@ -116,6 +131,8 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
     Route::get('/admin/products/{id}/edit', [AdminController::class, 'product_edit'])->name('admin.product.edit');
     Route::post('/admin/products/{id}/update', [AdminController::class, 'product_update'])->name('admin.product.update');
     Route::delete('/admin/products/{id}/delete', [AdminController::class, 'product_delete'])->name('admin.product.delete');
+
+
 });
 
 // Social Login Routes

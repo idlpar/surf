@@ -13423,9 +13423,9 @@ textarea.form-control-lg {
   padding-right: 0.9375rem;
   background-position: right center;
   cursor: pointer;
-  padding-left: 0;
+  padding-left: 0.50rem;
   box-shadow: none !important;
-  text-transform: uppercase;
+  text-transform: capitalize;
   font-weight: 500; }
 
 .shop-asc__seprator {
