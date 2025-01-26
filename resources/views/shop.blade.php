@@ -1,4 +1,47 @@
 @extends('layouts.app')
+@push('styles')
+    <style>
+        /* Custom Checkbox Styling */
+        .custom-checkbox {
+            width: 1.3em;
+            height: 1.3em;
+            border-radius: 50%;
+            border: 2px solid #007bff; /* Blue border for checkbox */
+            background-color: #f1f9ff; /* Light blue background for unchecked state */
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox:checked {
+            background-color: #007bff; /* Blue background when checked */
+            border-color: #007bff;
+        }
+
+        /* Hover effect on list items */
+        .hover-shadow:hover {
+            background-color: #f9fafb; /* Light background on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Darker shadow on hover */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Badge Gradient */
+        .bg-gradient {
+            background: linear-gradient(to right, #ff7e5f, #feb47b); /* Soft gradient from pink to orange */
+        }
+
+        /* Enhanced typography for category names */
+        label.mb-0 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        .filled-heart {
+            color: orange;
+        }
+        .filled-heart svg use {
+            fill: red !important;
+        }
+    </style>
+@endpush
 @section('content')
     <main class="pt-90">
         <section class="shop-main container d-flex pt-4 pt-xl-5">
@@ -26,40 +69,33 @@
                         </h5>
                         <div id="accordion-filter-1" class="accordion-collapse collapse show border-0"
                              aria-labelledby="accordion-heading-1" data-bs-parent="#categories-list">
-                            <div class="accordion-body px-0 pb-0 pt-3">
-                                <ul class="list list-inline mb-0">
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Dresses</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Shorts</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Sweatshirts</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Swimwear</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Jackets</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">T-Shirts & Tops</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Jeans</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Trousers</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Men</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Jumpers & Cardigans</a>
-                                    </li>
+                            <div class="accordion-body px-1 py-1 bg-white rounded-3">
+                                <ul class="list-group list-group-flush">
+                                    @foreach($categories as $category)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1 border-bottom bg-white rounded-3 shadow-sm hover-shadow">
+                                            <div class="d-flex align-items-center">
+                                                <!-- Checkbox -->
+                                                <input
+                                                    type="checkbox"
+                                                    id="category_{{ $category->id }}"
+                                                    name="categories"
+                                                    value="{{ $category->id }}"
+                                                    class="form-check-input me-3 custom-checkbox"
+                                                    {{ in_array($category->id, explode(',', $filtered_categories)) ? 'checked' : '' }}
+                                                >
+                                                <!-- Category Name -->
+                                                <label for="category_{{ $category->id }}" class="mb-0 text-dark fw-semibold" style="font-size: 17px;">
+                                                    {{ $category->name }}
+                                                </label>
+                                            </div>
+                                            <!-- Product Count -->
+                                            <span class="badge bg-success text-dark fs-12  rounded-circle px-3 py-2">{{ $category->products ? $category->products->count() : 0 }}</span>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -188,16 +224,16 @@
                         </h5>
                         <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
                              aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
-                            <input class="price-range-slider" type="text" name="price_range" value="" data-slider-min="10"
-                                   data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]" data-currency="$" />
+                            <input class="price-range-slider" type="text" name="price_range" value="" data-slider-min="20"
+                                   data-slider-max="{{ $max_price_in_db }}" data-slider-step="5" data-slider-value="[{{ $min_price }},{{ $max_price }}]" data-currency="Tk." />
                             <div class="price-range__info d-flex align-items-center mt-2">
                                 <div class="me-auto">
                                     <span class="text-secondary">Min Price: </span>
-                                    <span class="price-range__min">$250</span>
+                                    <span class="price-range__min">Tk. {{ $min_price }}</span>
                                 </div>
                                 <div>
                                     <span class="text-secondary">Max Price: </span>
-                                    <span class="price-range__max">$450</span>
+                                    <span class="price-range__max">Tk. {{ $max_price }}</span>
                                 </div>
                             </div>
                         </div>
@@ -433,13 +469,27 @@
                                     </div>
                                     <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                                 </div>
-
-                                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                                        title="Add To Wishlist">
-                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <use href="#icon_heart" />
-                                    </svg>
-                                </button>
+                                @if( Cart::instance('wishlist')->content()->where('id', $product->id)->count() > 0 )
+                                    <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist filled-heart" title="Add To Wishlist">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="red" xmlns="http://www.w3.org/2000/svg">
+                                            <use href="#icon_heart" />
+                                        </svg>
+                                    </button>
+                                @else
+                                <form method="POST" action="{{ route('wishlist.add') }}">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $product->id }}">
+                                    <input type="hidden" name="name" value="{{ $product->name }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <input type="hidden" name="price" value="{{ $product->sale_price ?? $product->regular_price }}">
+                                    <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
+                                            title="Add To Wishlist">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <use href="#icon_heart" />
+                                        </svg>
+                                    </button>
+                                </form>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -458,6 +508,9 @@
         <input type="hidden" name="page" value="{{ $products->currentPage() }}"/>
         <input type="hidden" name="size" id="size" value="{{ $size }}"/>
         <input type="hidden" name="order" id="order" value="{{ $order }}"/>
+        <input type="hidden" name="min_price" id="hidden_min_price" value="{{ $min_price }}">
+        <input type="hidden" name="max_price" id="hidden_max_price" value="{{ $max_price }}">
+        <input type="hidden" name="categories" id="hidden_categories" value="{{ implode(',', $category_ids) }}" />
         <input type="hidden" name="brands" id="hidden_brands" value="{{ implode(',', $brand_ids) }}" />
 
     </form>
@@ -465,34 +518,58 @@
 
 @push('scripts')
     <script>
-            $(document).ready(function () {
-                // When a brand checkbox is clicked
-                $("input[name='brands']").on("change", function () {
-                    // Collect all checked brand IDs
-                    let selectedBrands = [];
-                    $("input[name='brands']:checked").each(function () {
-                        selectedBrands.push($(this).val());
-                    });
-
-                    // Set the hidden input value to the selected brand IDs (comma-separated)
-                    $("#hidden_brands").val(selectedBrands.join(','));
-
-                    // Submit the form
-                    $("#form_filter").submit();
+        $(document).ready(function () {
+            // When a brand checkbox is clicked
+            $("input[name='brands']").on("change", function () {
+                // Collect all checked brand IDs
+                let selectedBrands = [];
+                $("input[name='brands']:checked").each(function () {
+                    selectedBrands.push($(this).val());
                 });
 
-                // When page size changes
-                $("#page_size").on("change", function () {
+                // Set the hidden input value to the selected brand IDs (comma-separated)
+                $("#hidden_brands").val(selectedBrands.join(','));
+
+                // Submit the form
+                $("#form_filter").submit();
+            });
+
+            // When a category checkbox is clicked
+            $("input[name='categories']").on("change", function () {
+                // Collect all checked category IDs
+                let selectedCategories = []; // Fixed typo in variable name
+                $("input[name='categories']:checked").each(function () {
+                    selectedCategories.push($(this).val());
+                });
+
+                // Set the hidden input value to the selected category IDs (comma-separated)
+                $("#hidden_categories").val(selectedCategories.join(','));
+
+                // Submit the form
+                $("#form_filter").submit();
+            });
+
+            // When page size changes
+            $("#page_size").on("change", function () {
                 $("#size").val($(this).val());
                 $("#form_filter").submit();
-                });
+            });
 
-                // When order dropdown changes
-                $("#order_by").on("change", function () {
+            // When order dropdown changes
+            $("#order_by").on("change", function () {
                 $("#order").val($(this).val());
                 $("#form_filter").submit();
-                });
             });
+            $("[name='price_range']").on("change", function (){
+                let min = $(this).val().split(',')[0];
+                let max = $(this).val().split(',')[1];
+                $("#hidden_min_price").val(min);
+                $("#hidden_max_price").val(max);
+                setTimeout(() => {
+                    $("#form_filter").submit();
+                    }, 2000);
+            });
+        });
     </script>
 @endpush
 
