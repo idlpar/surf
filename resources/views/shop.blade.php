@@ -470,11 +470,15 @@
                                     <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                                 </div>
                                 @if( Cart::instance('wishlist')->content()->where('id', $product->id)->count() > 0 )
-                                    <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist filled-heart" title="Add To Wishlist">
+                                    <form method="POST" action="{{ route('wishlist.remove', ['rowId' => Cart::instance('wishlist')->content()->where('id', $product->id)->first()->rowId]) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist filled-heart" title="Remove From Wishlist">
                                         <svg width="16" height="16" viewBox="0 0 20 20" fill="red" xmlns="http://www.w3.org/2000/svg">
                                             <use href="#icon_heart" />
                                         </svg>
                                     </button>
+                                    </form>
                                 @else
                                 <form method="POST" action="{{ route('wishlist.add') }}">
                                     @csrf

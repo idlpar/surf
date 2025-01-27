@@ -6,6 +6,7 @@
             <h2 class="page-title">Wishlist</h2>
 
             <div class="shopping-cart">
+                @if( $items->count() > 0)
                 <div class="cart-table__wrapper">
                     <table class="cart-table">
                         <thead>
@@ -14,7 +15,7 @@
                             <th></th>
                             <th>Price</th>
                             <th>Quantity</th>
-                            <th>Subtotal</th>
+                            <th>Action</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -44,20 +45,31 @@
                                 </div><!-- .qty-control -->
                             </td>
                             <td>
-                                <a href="#" class="remove-cart">
+                                <form  method="POST" action="{{ route('wishlist.remove', [ 'rowId' => $item->rowId ]) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="rowId" value="{{ $item->rowId }}">
+                                <a href="javascript:void(0)" class="remove-cart" onclick="this.closest('form').submit();">
                                     <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
                                         <path d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
                                     </svg>
                                 </a>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
                         </tbody>
                     </table>
+                    <form method="POST" action="{{ route('wishlist.clear') }}">
+                        @csrf
+                        @method('DELETE')
                     <div class="cart-table-footer">
-                        <button class="btn btn-light">UPDATE CART</button>
+                        <button type="submit" class="btn" style="border: 1px solid red; background-color: #ffc107; color: black; font-size: 1.2rem; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='red'; this.style.color='white'; this.style.borderColor='darkred';" onmouseout="this.style.backgroundColor='#ffc107'; this.style.color='black'; this.style.borderColor='red';">
+                            Clear Wishlist
+                        </button>
                     </div>
+                    </form>
                 </div>
                 <div class="shopping-cart__totals-wrapper">
                     <div class="sticky-content">
@@ -110,6 +122,19 @@
                         </div>
                     </div>
                 </div>
+                @else
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="text-center w-100 px-4">
+                            <div class="alert alert-warning shadow-sm mx-auto p-5" style="max-width: 600px;">
+                                <h4 class="text-danger mb-3">Your Wishlist is Empty!</h4>
+                                <p class="text-muted mb-4">It seems like your wishlist is currently empty. Start adding items now!</p>
+                                <a href="{{ route('shop.index') }}" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-bag"></i> Browse Products
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </section>
     </main>
