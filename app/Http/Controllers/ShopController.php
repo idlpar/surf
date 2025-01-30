@@ -100,7 +100,7 @@ class ShopController extends Controller
             ->get();
 
         // Return the product details view
-        return view('product-details', [
+        return view('details', [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
         ]);

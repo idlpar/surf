@@ -88,6 +88,7 @@ Route::post('password/otp/verify', [OtpController::class, 'verifyPasswordResetOt
 */
 
 // Home Route
+//Auth::routes();
 //Route::redirect('/', '/home');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -102,10 +103,15 @@ Route::post('/cart/decrease/{rowId}', [CartController::class, 'decrease_cart_qua
 Route::delete('/cart/remove/{rowId}', [CartController::class, 'remove_cart_item'])->name('cart.remove');
 Route::delete('/cart/clear', [CartController::class, 'empty_cart'])->name('cart.clear');
 
+Route::post('/cart/apply-coupon', [CartController::class, 'apply_coupon_code'])->name('coupon.apply');
+Route::delete('/cart/remove-coupon', [CartController::class, 'remove_coupon'])->name('coupon.remove');
+
+
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 Route::post('/wishlist/add', [WishlistController::class, 'add_to_wishlist'])->name('wishlist.add');
 Route::delete('/wishlist/remove/{rowId}', [WishlistController::class, 'remove_item'])->name('wishlist.remove');
 Route::delete('/wishlist/clear', [WishlistController::class, 'empty_wishlist'])->name('wishlist.clear');
+Route::post('/wishlist/move-to-cart/{rowId}', [WishlistController::class, 'move_to_cart'])->name('wishlist.move_to_cart');
 
 
 
@@ -136,7 +142,12 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
     Route::post('/admin/products/{id}/update', [AdminController::class, 'product_update'])->name('admin.product.update');
     Route::delete('/admin/products/{id}/delete', [AdminController::class, 'product_delete'])->name('admin.product.delete');
 
-
+    Route::get ('/admin/coupons', [AdminController::class, 'coupons'])->name('admin.coupons');
+    Route::get('/admin/coupons/add', [AdminController::class, 'coupon_add'])->name('admin.coupon.add');
+    Route::post('/admin/coupons/store', [AdminController::class, 'coupon_store'])->name('admin.coupon.store');
+    Route::get('/admin/coupons/{id}/edit', [AdminController::class, 'coupon_edit'])->name('admin.coupon.edit');
+    Route::put('/admin/coupons/{id}', [AdminController::class, 'coupon_update'])->name('admin.coupon.update');
+    Route::delete('/admin/coupons/{id}/delete', [AdminController::class, 'coupon_destroy'])->name('admin.coupon.delete');
 });
 
 // Social Login Routes

@@ -1,4 +1,48 @@
 @extends('layouts.app')
+@push('styles')
+    <style>
+        .shopping-cart__totals {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .cart-totals {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cart-totals td, .cart-totals th {
+            padding: 1rem 0;
+            border-bottom: 1px solid #dee2e6;
+            text-align: right;
+        }
+
+        .cart-totals th {
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .discount-row td {
+            color: #FF2D20;
+        }
+
+        .total-row th, .total-row td {
+            font-weight: 700;
+            font-size: 1.1em;
+            border-bottom: none;
+        }
+
+        .shipping-options .form-check {
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-checkout {
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+        }
+    </style>
+@endpush
 @section('content')
     <main class="pt-90">
         <div class="mb-4 pb-4"></div>
@@ -59,7 +103,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="shopping-cart__product-price">Tk. {{ $item->price }}</span>
+                                <span class="shopping-cart__product-price"> {{ $item->price }}</span>
                             </td>
                             <td>
                                 <div class="qty-control position-relative">
@@ -75,7 +119,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="shopping-cart__subtotal">Tk. {{ $item->subTotal() }}</span>
+                                <span class="shopping-cart__subtotal"> {{ $item->subTotal() }}</span>
                             </td>
                             <td>
                                 <form method="POST" action="{{ route('cart.remove', [ 'rowId' => $item->rowId ]) }}">
@@ -94,72 +138,125 @@
                         </tbody>
                     </table>
                     <div class="cart-table-footer">
-                        <form action="#" class="position-relative bg-body">
-                            <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code">
-                            <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit"
-                                   value="APPLY COUPON">
-                        </form>
+                        @if(!Session::has('coupon'))
+                            <form method="POST" action="{{ route('coupon.apply') }}" class="position-relative bg-body">
+                                @csrf
+                                <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code" value="@if(Session::has('coupon')) {{Session::get('coupon')['code']}} Applied! @endif" style="border: 1px solid green;">
+                                <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit"
+                                       value="APPLY COUPON">
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('coupon.remove') }}" class="position-relative bg-body">
+                                @csrf
+                                @method('DELETE')
+                                <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code" value="@if(Session::has('coupon')) {{Session::get('coupon')['code']}} Applied! @endif" style="border: 1px solid red;">
+                                <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit" value="REMOVE COUPON" style="color: red; font-weight: bold;">
+                            </form>
+                        @endif
+
                         <form method="POST" action="{{ route('cart.clear') }}">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn" style="border: 1px solid red; background-color: #ffc107; color: black; font-size: 1.2rem; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='red'; this.style.color='white'; this.style.borderColor='darkred';" onmouseout="this.style.backgroundColor='#ffc107'; this.style.color='black'; this.style.borderColor='red';">
                                 Clear Cart
                             </button>
-
                         </form>
                     </div>
+                    <div>
+                        @if( Session::has('success'))
+                            <p style="color: #0f5132;">{{ Session::get('success') }}</p>
+                        @elseif(Session::has('error'))
+                        <p class="text-danger">{{ Session::has('error')}}</p>
+                        @endif
+                    </div>
                 </div>
-                <div class="shopping-cart__totals-wrapper">
-                    <div class="sticky-content">
-                        <div class="shopping-cart__totals">
-                            <h3>Cart Totals</h3>
-                            <table class="cart-totals">
-                                <tbody>
-                                <tr>
-                                    <th>Subtotal</th>
-                                    <td>Tk. {{ Cart::instance('cart')->subtotal() }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Shipping</th>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input form-check-input_fill" type="checkbox" value=""
-                                                   id="free_shipping">
-                                            <label class="form-check-label" for="free_shipping">Free shipping</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input form-check-input_fill" type="checkbox" value="" id="flat_rate">
-                                            <label class="form-check-label" for="flat_rate">Flat rate: $49</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input form-check-input_fill" type="checkbox" value=""
-                                                   id="local_pickup">
-                                            <label class="form-check-label" for="local_pickup">Local pickup: $8</label>
-                                        </div>
-                                        <div>Shipping to AL.</div>
-                                        <div>
-                                            <a href="#" class="menu-link menu-link_us-s">CHANGE ADDRESS</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>VAT</th>
-                                    <td>Tk. {{ Cart::instance('cart')->tax() }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Total</th>
-                                    <td>Tk. {{ Cart::instance('cart')->total() }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="mobile_fixed-btn_wrapper">
-                            <div class="button-wrapper container">
-                                <a href="checkout.html" class="btn btn-primary btn-checkout">PROCEED TO CHECKOUT</a>
+                    <div class="shopping-cart__totals-wrapper">
+                        <div class="sticky-content">
+                            <div class="shopping-cart__totals">
+                                <h3>Cart Totals</h3>
+                                <table class="cart-totals">
+                                    <tbody>
+                                    <!-- Subtotal -->
+                                    <tr>
+                                        <th>Subtotal</th>
+                                        <td> {{ format_currency(Cart::instance('cart')->subtotal()) }}</td>
+                                    </tr>
+
+                                    <!-- Discount -->
+                                    @if(Session::has('coupon'))
+                                        <tr class="discount-row">
+                                            <th>Discount ({{ session('coupon.code') }})</th>
+                                            <td>{{ format_currency(session('discounts.discount') * -1) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Subtotal After Discount</th>
+                                            <td> {{ format_currency(session('discounts.subtotal'))}}</td>
+                                        </tr>
+                                    @endif
+
+                                    <!-- Shipping -->
+                                    <tr>
+                                        <th>Shipping</th>
+                                        <td>
+                                            <div class="shipping-options">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="shipping"
+                                                           id="free_shipping" value="0" required>
+                                                    <label class="form-check-label" for="free_shipping">
+                                                        Free shipping
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="shipping"
+                                                           id="flat_rate" value="49">
+                                                    <label class="form-check-label" for="flat_rate">
+                                                        Flat rate:  {{ format_currency(49) }}
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="shipping"
+                                                           id="local_pickup" value="8">
+                                                    <label class="form-check-label" for="local_pickup">
+                                                        Local pickup:  {{ format_currency(8) }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="shipping-address mt-2">
+                                                <div>Shipping to {{ $userShippingAddress->city ?? 'N/A' }}</div>
+                                                <a href="#"
+                                                   class="btn btn-link btn-sm p-0 text-decoration-none">
+                                                    Change Address
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Tax -->
+                                    <tr>
+                                        <th>VAT</th>
+                                        <td> {{ format_currency(Session::has('discounts') ? session('discounts.tax') : Cart::instance('cart')->tax()) }}</td>
+                                    </tr>
+
+                                    <!-- Total -->
+                                    <tr class="total-row">
+                                        <th>Total</th>
+                                        <td> {{ format_currency(Session::has('discounts') ? session('discounts.total') : Cart::instance('cart')->total()) }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Checkout Button -->
+                            <div class="mobile_fixed-btn_wrapper">
+                                <div class="button-wrapper container">
+                                    <a href="#"
+                                       class="btn btn-primary btn-checkout w-100 py-3">
+                                        PROCEED TO CHECKOUT
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 @else
                     <div class="d-flex justify-content-center align-items-center">
                         <div class="text-center w-100 px-4">

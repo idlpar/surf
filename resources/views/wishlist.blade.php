@@ -44,18 +44,39 @@
                                     <input type="number" name="quantity" value="{{ $item->qty }}" min="1" class="qty-control__number text-center">
                                 </div><!-- .qty-control -->
                             </td>
-                            <td>
-                                <form  method="POST" action="{{ route('wishlist.remove', [ 'rowId' => $item->rowId ]) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="rowId" value="{{ $item->rowId }}">
-                                <a href="javascript:void(0)" class="remove-cart" onclick="this.closest('form').submit();">
-                                    <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
-                                        <path d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
-                                    </svg>
-                                </a>
-                                </form>
+                            <td class="text-end">
+                                <div class="d-flex align-items-center gap-2">
+                                    <!-- Move to Cart Button -->
+                                    <form method="POST" action="{{ route('wishlist.move_to_cart', ['rowId' => $item->rowId]) }}" class="m-0">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-success d-flex align-items-center gap-1">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M9 20C9 21.1046 8.10457 22 7 22C5.89543 22 5 21.1046 5 20C5 18.8954 5.89543 18 7 18C8.10457 18 9 18.8954 9 20Z" fill="currentColor"/>
+                                                <path d="M20 20C20 21.1046 19.1046 22 18 22C16.8954 22 16 21.1046 16 20C16 18.8954 16.8954 18 18 18C19.1046 18 20 18.8954 20 20Z" fill="currentColor"/>
+                                                <path d="M2 3H4.5L6.5 15H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M6.5 11H18.5C19.0523 11 19.5 10.5523 19.5 10V6C19.5 5.44772 19.0523 5 18.5 5H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            <span>Move to Cart</span>
+                                        </button>
+                                    </form>
+
+                                    <!-- Remove Button -->
+                                    <form method="POST" action="{{ route('wishlist.remove', ['rowId' => $item->rowId]) }}" class="m-0">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="rowId" value="{{ $item->rowId }}">
+                                        <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center gap-1">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M5 7H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M10 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M14 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M18 7V19C18 20.1046 17.1046 21 16 21H8C6.89543 21 6 20.1046 6 19V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M9 7V4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            <span>Remove</span>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach

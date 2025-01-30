@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Coupon;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
-
-
+use MongoDB\Driver\Session;
+use Surfsidemedia\Shoppingcart\Facades\Cart;
 
 
 class AdminController extends Controller
@@ -745,6 +746,84 @@ class AdminController extends Controller
             // Redirect back with an error message
             return redirect()->route('admin.products')->withErrors('Failed to delete product. Please try again.');
         }
+    }
+
+    public function coupons()
+    {
+        $coupons = Coupon::orderBy('expiry_date', 'DESC')->paginate(12);
+        return view('admin.coupons', compact('coupons'));
+    }
+
+    public function coupon_add()
+    {
+        return view('admin.coupon-add');
+    }
+
+    public function coupon_store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'code' => 'required|string|max:100|unique:coupons,code',
+            'type' => 'required|string|in:percent,fixed',
+            'value' => [
+                'required',
+                'numeric',
+                'min:0',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->type === 'percent' && $value > 100) {
+                        $fail('The percentage discount cannot exceed 100%.');
+                    } elseif ($request->type === 'fixed' && $value > $request->cart_value) {
+                        $fail('The fixed discount cannot exceed the cart value.');
+                    }
+                },
+            ],
+            'cart_value' => 'required|numeric|min:0',
+            'expiry_date' => 'required|date|after_or_equal:today'
+        ]);
+
+        $coupon = Coupon::create($validatedData);
+
+        return redirect()->route('admin.coupons')->with('success', 'Coupon has been added successfully!');
+    }
+    // Controller methods
+    public function coupon_edit($id)
+    {
+        $coupon = Coupon::findOrFail($id);
+        return view('admin.coupon-edit', compact('coupon'));
+    }
+
+    public function coupon_update(Request $request, $id)
+    {
+        $coupon = Coupon::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'code' => 'required|string|max:100|unique:coupons,code,' . $coupon->id,
+            'type' => 'required|string|in:percent,fixed',
+            'value' => [
+                'required',
+                'numeric',
+                'min:0',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->type === 'percent' && $value > 100) {
+                        $fail('The percentage discount cannot exceed 100%.');
+                    } elseif ($request->type === 'fixed' && $value > $request->cart_value) {
+                        $fail('The fixed discount cannot exceed the cart value.');
+                    }
+                },
+            ],
+            'cart_value' => 'required|numeric|min:0',
+            'expiry_date' => 'required|date|after_or_equal:today'
+        ]);
+
+        $coupon->update($validatedData);
+
+        return redirect()->route('admin.coupons')->with('success', 'Coupon has been updated successfully!');
+    }
+    public function coupon_destroy($id)
+    {
+        $coupon = Coupon::findOrFail($id);
+        $coupon->delete();
+
+        return redirect()->route('admin.coupons')->with('success', 'Coupon deleted successfully');
     }
 
 }
