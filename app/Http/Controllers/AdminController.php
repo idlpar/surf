@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Coupon;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
@@ -107,7 +110,7 @@ class AdminController extends Controller
     }
     public function brand_edit($id)
     {
-        $brand = Brand::find($id);
+        $brand = Brand::findOrFail($id);
         return view('admin.brand-edit', compact('brand'));
     }
     public function brand_update(Request $request)
@@ -332,7 +335,7 @@ class AdminController extends Controller
     }
     public function category_edit($id)
     {
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
         return view('admin.category-edit', compact('category'));
     }
     public function category_update(Request $request)
@@ -604,7 +607,7 @@ class AdminController extends Controller
 
     public function product_edit($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $categories = Category::select('id', 'name')->orderBy('name', 'asc')->get();
         $brands  = Brand::select('id', 'name')->orderBy('name', 'asc')->get();
         return view('admin.product-edit', compact('product', 'brands', 'categories'));
@@ -825,6 +828,26 @@ class AdminController extends Controller
 
         return redirect()->route('admin.coupons')->with('success', 'Coupon deleted successfully');
     }
+
+    public function orders()
+    {
+        $orders = Order::with(['user', 'items'])
+            ->latest()
+            ->paginate(12);
+
+        return view('admin.orders', compact('orders'));
+    }
+
+    public function order_details($order_id)
+    {
+        $order = Order::with([
+            'items.product.category',  // Load products & categories
+            'transaction',             // Load transaction details
+        ])->findOrFail($order_id);
+
+        return view('admin.order-details', compact('order'));
+    }
+
 
 }
 

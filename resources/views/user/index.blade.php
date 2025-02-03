@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <main class="pt-0">
+    <main class="pt-90">
         <div class="mb-4 pb-4"></div>
         <section class="my-account container">
             <h2 class="page-title">My Account</h2>

@@ -200,22 +200,19 @@
                                         <td>
                                             <div class="shipping-options">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="shipping"
-                                                           id="free_shipping" value="0" required>
+                                                    <input class="form-check-input" type="radio" name="shipping" id="free_shipping" value="0" required>
                                                     <label class="form-check-label" for="free_shipping">
                                                         Free shipping
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="shipping"
-                                                           id="flat_rate" value="49">
+                                                    <input class="form-check-input" type="radio" name="shipping" id="flat_rate" value="49">
                                                     <label class="form-check-label" for="flat_rate">
                                                         Flat rate:  {{ format_currency(49) }}
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="shipping"
-                                                           id="local_pickup" value="8">
+                                                    <input class="form-check-input" type="radio" name="shipping" id="local_pickup" value="8">
                                                     <label class="form-check-label" for="local_pickup">
                                                         Local pickup:  {{ format_currency(8) }}
                                                     </label>
@@ -249,7 +246,7 @@
                             <!-- Checkout Button -->
                             <div class="mobile_fixed-btn_wrapper">
                                 <div class="button-wrapper container">
-                                    <a href="#"
+                                    <a href="{{ route('cart.checkout') }}"
                                        class="btn btn-primary btn-checkout w-100 py-3">
                                         PROCEED TO CHECKOUT
                                     </a>
