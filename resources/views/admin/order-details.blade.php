@@ -4,6 +4,7 @@
         .table-transaction>tbody>tr:nth-of-type(odd) {
             --bs-table-accent-bg: #fff !important;
         }
+
     </style>
 @endpush
 @section('content')
@@ -72,64 +73,130 @@
             </div>
 
             <div class="wg-box mt-5">
-                <div class="my-account__address-item col-md-6">
-                    <div class="my-account__address-item__detail card shadow-lg p-4 rounded">
-                        @php
-                            $shippingAddress = json_decode($order->shipping_address, true) ?? []; // Ensure it's an array
-                        @endphp
+                <div class="row">
+                    <!-- Left Side - Shipping Address -->
+                    <div class="col-md-5">
+                        <div class="card shadow-lg p-4 rounded h-100">
+                            @php
+                                $shippingAddress = json_decode($order->shipping_address, true) ?? [];
+                            @endphp
 
-                        @if(!empty($shippingAddress))
-                            <h5 class="font-weight-bold mb-3 text-primary" style="font-size: 2.5rem; margin-bottom: 10px !important;">Shipping Address</h5>
-                            <div class="address-detail">
-                                <p style="font-size: 2rem; margin-bottom: 10px;"><strong>Name:</strong> {{ $shippingAddress['name'] ?? 'N/A' }}</p>
-                                <p style="font-size: 2rem; margin-bottom: 10px;"><strong>Address:</strong> {{ $shippingAddress['address'] ?? 'N/A' }}</p>
-                                <p style="font-size: 2rem; margin-bottom: 10px;"><strong>Locality:</strong> {{ $shippingAddress['locality'] ?? 'N/A' }}</p>
-                                <p style="font-size: 2rem; margin-bottom: 10px;"><strong>City, State:</strong> {{ $shippingAddress['city'] ?? 'N/A' }}, {{ $shippingAddress['state'] ?? 'N/A' }}</p>
-                                <p style="font-size: 2rem; margin-bottom: 10px;"><strong>Postal Code:</strong> {{ $shippingAddress['postal_code'] ?? 'N/A' }}</p>
-                                <br>
-                                <p style="font-size: 2rem; margin-bottom: 10px;"><strong>Mobile:</strong> {{ $shippingAddress['phone'] ?? 'N/A' }}</p>
-                            </div>
-                        @else
-                            <p style="font-size: 2rem;">No shipping address provided.</p>
-                        @endif
+                            @if(!empty($shippingAddress))
+                                <h5 class="font-weight-bold mb-3" style="font-size: 2.5rem; line-height: 5rem;">Shipping Address</h5>
+                                <div class="address-detail">
+                                    <p style="font-size: 16px; line-height: 2.5rem;"><strong>Name:</strong> {{ $shippingAddress['name'] ?? 'N/A' }}</p>
+                                    <p style="font-size: 16px; line-height: 2.5rem;"><strong>Address:</strong> {{ $shippingAddress['address'] ?? 'N/A' }}</p>
+                                    <p style="font-size: 16px; line-height: 2.5rem;"><strong>Locality:</strong> {{ $shippingAddress['locality'] ?? 'N/A' }}</p>
+                                    <p style="font-size: 16px; line-height: 2.5rem;"><strong>City, State:</strong> {{ $shippingAddress['city'] ?? 'N/A' }}, {{ $shippingAddress['state'] ?? 'N/A' }}</p>
+                                    <p style="font-size: 16px; line-height: 2.5rem;"><strong>Postal Code:</strong> {{ $shippingAddress['postal_code'] ?? 'N/A' }}</p>
+                                    <p style="font-size: 16px; line-height: 5.5rem;"><strong>Mobile:</strong> {{ $shippingAddress['phone'] ?? 'N/A' }}</p>
+                                </div>
+                            @else
+                                <p class="text-muted">No shipping address provided.</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Right Side - Transactions Table -->
+                    <div class="col-md-7">
+                        <div class="card shadow-lg p-4 rounded h-100">
+                            <h5 class="font-weight-bold mb-3 lh-lg">Transactions</h5>
+                            <table class="table table-responsive-md table-bordered fs-5 w-100">
+                                <tbody>
+                                <tr>
+                                    <th>Total</th>
+                                    <td class="text-success font-weight-bold">{{ format_currency($order->total) }}</td>
+                                    <th class="w-25">Tax</th>
+                                    <td class="w-25">{{ format_currency($order->tax) }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="w-25">Subtotal</th>
+                                    <td class="w-25">{{ format_currency($order->subtotal) }}</td>
+                                    <th>Discount</th>
+                                    <td>{{ format_currency($order->discount) }}</td>
+
+                                </tr>
+                                <tr>
+                                    <th>Payment Mode</th>
+                                    <td class="text-capitalize">{{ optional($order->transaction)->gateway ?? 'N/A' }}</td>
+                                    <th>Status</th>
+                                    <td class="text-capitalize">{{ $order->payment_status }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Order Date</th>
+                                    <td>{{ $order->created_at ? \Carbon\Carbon::parse($order->created_at)->format('d-M-y g:i a') : '' }}</td>
+                                    <th>Delivered Date</th>
+                                    <td>{{ $order->delivered_at ? \Carbon\Carbon::parse($order->delivered_at)->format('d-M-y g:i a') : 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Canceled Date</th>
+                                    <td colspan="3" class="text-danger">
+                                        {{ $order->canceled_at ? \Carbon\Carbon::parse($order->canceled_at)->format('d-M-y g:i a') : 'N/A' }}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
-
-
-
-            <div class="wg-box mt-5">
-                <h5>Transactions</h5>
-                <table class="table table-striped table-bordered table-transaction">
-                    <tbody>
-                    <tr>
-                        <th>Subtotal</th>
-                        <td>{{ format_currency($order->subtotal) }}</td>
-                        <th>Tax</th>
-                        <td>{{ format_currency($order->tax) }}</td>
-                        <th>Discount</th>
-                        <td>{{ format_currency($order->discount) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Total</th>
-                        <td>{{ format_currency($order->total) }}</td>
-                        <th>Payment Mode</th>
-                        <td class="text-capitalize">{{ optional($order->transaction)->gateway ?? 'N/A'  }}</td>
-                        <th>Status</th>
-                        <td class="text-capitalize">{{ $order->payment_status }}</td>
-                    </tr>
-                    <tr>
-                        <th>Order Date</th>
-                        <td>{{ $order->created_at ? $order->created_at->format('Y-m-d H:i:s') : "" }}</td>
-                        <th>Delivered Date</th>
-                        <td>{{ $order->delivered_at ? $order->delivered_at->format('Y-m-d H:i:s') : 'N/A' }}</td>
-                        <th>Canceled Date</th>
-                        <td>{{ $order->canceled_at ? $order->canceled_at->format('Y-m-d H:i:s') : 'N/A' }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="card shadow-lg mt-5">
+                <div class="card-header text-white">
+                    <h5 class="mb-0">Order History</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered align-middle">
+                            <thead class="table-dark">
+                            <tr>
+                                <th class="text-center" style="width: 5%;">#</th>
+                                <th class="text-center" style="width: 15%;">Order Date</th>
+                                <th class="text-center" style="width: 30%;">Items Name</th> <!-- This will take max width -->
+                                <th class="text-center" style="width: 10%;">Item Count</th>
+                                <th class="text-center" style="width: 15%;">Total Value</th>
+                                <th class="text-center" style="width: 15%;">Status</th>
+                                <th class="text-center" style="width: 10%;">Comment</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($orders as $index => $order)
+                                <tr onclick="window.location='{{ route('admin.order.details', $order->id) }}'" style="cursor: pointer;">
+                                    <td class="text-center">{{ $index + 1 }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-M-y g:i A') }}</td>
+                                    <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        @foreach($order->items as $item)
+                                            <span class="badge bg-secondary">{{ $item->product->name }}</span>
+                                        @endforeach
+                                    </td>
+                                    <td class="text-center fw-bold">{{ $order->items->sum('quantity') }}</td>
+                                    <td class="text-end text-success fw-bold">{{ format_currency($order->total) }}</td>
+                                    <td class="text-center">
+                                        @if($order->delivered_at)
+                                            <span class="badge bg-success">
+                                        Delivered: {{ \Carbon\Carbon::parse($order->delivered_at)->format('d-M-y g:i A') }}
+                                    </span>
+                                        @elseif($order->canceled_at)
+                                            <span class="badge bg-danger">
+                                        Canceled: {{ \Carbon\Carbon::parse($order->canceled_at)->format('d-M-y g:i A') }}
+                                    </span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">{{ $order->order_id ?? 'N/A' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">No previous orders found.</td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 @endsection

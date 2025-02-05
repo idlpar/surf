@@ -31,6 +31,7 @@ class Order extends Model
         'shipping_address',
         'notes',
         'order_date',
+        'canceled_at',
     ];
 
     /**

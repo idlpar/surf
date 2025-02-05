@@ -845,7 +845,14 @@ class AdminController extends Controller
             'transaction',             // Load transaction details
         ])->findOrFail($order_id);
 
-        return view('admin.order-details', compact('order'));
+        // Fetch all previous orders by the same user in descending order
+        $orders = Order::where('user_id', $order->user_id) // Fetch orders by the same user
+        ->where('id', '!=', $order->id)    // Exclude the current order
+        ->orderBy('created_at', 'desc')   // Sort by most recent
+        ->with('items.product')          // Load product details
+        ->paginate(12);
+
+        return view('admin.order-details', compact('orders', 'order'));
     }
 
 

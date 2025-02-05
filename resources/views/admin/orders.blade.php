@@ -50,11 +50,12 @@
                                     <th class="text-center">Order Date</th>
                                     <th class="text-center">Total Items</th>
                                     <th class="text-center">Delivered On</th>
+                                    <th class="text-center">Canceled!</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
-                                @foreach( $orders as $order )
                                 <tbody>
+                                @foreach( $orders as $order )
                                 <tr>
                                     <td class="text-center">{{ $order->id }}</td>
                                     <td class="text-center">{{ $order->user->name }}</td>
@@ -65,10 +66,18 @@
                                     <td class="text-center">{{ format_currency($order->total) }}</td>
 
                                     <td class="text-center">{{ $order->payment_status }}</td>
-                                    <td class="text-center">{{ $order->created_at->format('d-m-y \a\t H:i') }}</td>
+                                    <td class="text-center">{{ $order->created_at->format('d-M-y g:i a') }}</td>
                                     <td class="text-center">{{ $order->items->count() }}</td>
-                                    <td class="text-center">{{ $order->delivered_at ? $order->delivered_at->format('d F, Y \a\t h:i A') : "Yet to" }}</td>
-
+                                    <td class="text-center">
+                                        <span class="badge {{ $order->delivered_at ? 'bg-danger' : 'bg-success' }} p-2">
+                                            {{ $order->delivered_at ? 'Yes' : 'No' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge {{ $order->canceled_at ? 'bg-danger' : 'bg-success' }} p-2">
+                                            {{ $order->canceled_at ? 'Yes' : 'No' }}
+                                        </span>
+                                    </td>
                                     <td class="text-center">
                                         <a href="{{ route('admin.order.details', [ 'order_id' => $order->id ]) }}">
                                             <div class="list-icon-function view-icon">
@@ -79,8 +88,8 @@
                                         </a>
                                     </td>
                                 </tr>
-                                </tbody>
                                 @endforeach
+                                </tbody>
                             </table>
                         </div>
                     </div>

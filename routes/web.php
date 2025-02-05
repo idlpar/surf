@@ -119,6 +119,9 @@ Route::get('/order-confirmation', [CartController::class, 'order_confirmation'])
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
+    Route::get('/user-orders', [UserController::class, 'orders'])->name('user.orders');
+    Route::get('/user/{order_id}/order', [UserController::class, 'order_details'])->name('user.order.details');
+    Route::post('/user/{order_id}/cancel', [UserController::class, 'cancel_order'])->name('user.cancel.order');
 });
 
 Route::middleware(['auth', AuthAdmin::class])->group(function () {
