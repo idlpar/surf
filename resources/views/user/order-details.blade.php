@@ -110,6 +110,52 @@
             transform: scale(0.98);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
+        /* Icon styling */
+        .btn-gradient-main i {
+            margin-right: 10px;
+        }
+
+        /* Adjust the title size */
+        .swal2-popup .swal2-title {
+            font-size: 24px;  /* Title font size */
+        }
+
+        /* Adjust the body text size */
+        .swal2-popup .swal2-html-container {
+            font-size: 18px;  /* Body font size */
+            line-height: 1.5rem;
+        }
+
+        /* Adjust confirm button font size and overall size */
+        .swal2-popup .swal2-confirm {
+            font-size: 16px;  /* Button font size */
+            padding: 12px 24px;  /* Button padding (increase for larger button) */
+            font-weight: bold;  /* Optional: Make text bold */
+            border-radius: 15px;
+        }
+
+        /* Adjust cancel button font size and overall size */
+        .swal2-popup .swal2-cancel {
+            font-size: 16px;  /* Button font size */
+            padding: 12px 24px;  /* Button padding (increase for larger button) */
+            font-weight: bold;  /* Optional: Make text bold */
+            border-radius: 15px;
+        }
+        /* Increase the width of the popup box */
+        .swal2-popup {
+            width: 400px;  /* Set custom width */
+            max-width: 50%;  /* Make sure it is responsive */
+        }
+        /* Custom styling for the red circular icon */
+        .custom-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%; /* Makes it a circle */
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            justify-content: center;
+        }
 
     </style>
 @endpush
@@ -134,6 +180,19 @@
                             </div>
                         </div>
                         <div class="table-responsive">
+                            @if(Session::has('success'))
+                                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center fs-5 fw-bold" role="alert">
+                                    <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                                    <strong>{{ Session::get('success') }}</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @elseif(Session::has('error'))
+                                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center fs-5 fw-bold" role="alert">
+                                    <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                                    <strong>{{ Session::get('error') }}</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
                             <table class="table table-hover table-striped table-bordered w-100">
                                 <thead class="table-dark fs-6">
                                 <tr>
@@ -176,13 +235,14 @@
                                 </tbody>
                             </table>
                             <div class="wg-box mt-0 d-flex justify-content-center align-items-center">
-                                @if($order->canceled_at)
+                                @if($order->status == 'canceled')
                                     <button class="btn-gradient-canceled" disabled>
                                         Order Canceled
                                     </button>
-
+                                @elseif($order->status == 'delivered' || $order->status == 'refunded' || $order->status == 'shipped')
+                                    <!-- No button for delivered, refunded, or shipped orders -->
                                 @else
-                                    <button type="button" class="btn-gradient-cancel" onclick="document.getElementById('cancel_order_form').submit();">
+                                    <button type="button" class="btn-gradient-cancel" onclick="confirmCancelOrder()">
                                         Cancel Order
                                     </button>
 
@@ -213,12 +273,12 @@
                                     @if(!empty($shippingAddress))
                                         <h5 class="font-weight-bold mb-3" style="font-size: 1.5rem; line-height: 2rem;">Shipping Address</h5>
                                         <div class="address-detail">
-                                            <p style="font-size: 20px; line-height: 1rem;"><strong>Name:</strong> {{ $shippingAddress['name'] ?? 'N/A' }}</p>
-                                            <p style="font-size: 20px; line-height: 1rem;"><strong>Address:</strong> {{ $shippingAddress['address'] ?? 'N/A' }}</p>
-                                            <p style="font-size: 20px; line-height: 1rem;"><strong>Locality:</strong> {{ $shippingAddress['locality'] ?? 'N/A' }}</p>
-                                            <p style="font-size: 20px; line-height: 1rem;"><strong>City, State:</strong> {{ $shippingAddress['city'] ?? 'N/A' }}, {{ $shippingAddress['state'] ?? 'N/A' }}</p>
-                                            <p style="font-size: 20px; line-height: 1rem;"><strong>Postal Code:</strong> {{ $shippingAddress['postal_code'] ?? 'N/A' }}</p>
-                                            <p style="font-size: 20px; line-height: 1.5rem;"><strong>Mobile:</strong> {{ $shippingAddress['phone'] ?? 'N/A' }}</p>
+                                            <p style="font-size: 16px; line-height: 1rem;"><strong>Name:</strong> {{ $shippingAddress['name'] ?? 'N/A' }}</p>
+                                            <p style="font-size: 16px; line-height: 1rem;"><strong>Address:</strong> {{ $shippingAddress['address'] ?? 'N/A' }}</p>
+                                            <p style="font-size: 16px; line-height: 1rem;"><strong>Locality:</strong> {{ $shippingAddress['locality'] ?? 'N/A' }}</p>
+                                            <p style="font-size: 16px; line-height: 1rem;"><strong>City, State:</strong> {{ $shippingAddress['city'] ?? 'N/A' }}, {{ $shippingAddress['state'] ?? 'N/A' }}</p>
+                                            <p style="font-size: 16px; line-height: 1rem;"><strong>Postal Code:</strong> {{ $shippingAddress['postal_code'] ?? 'N/A' }}</p>
+                                            <p style="font-size: 16px; line-height: 1.5rem;"><strong>Mobile:</strong> {{ $shippingAddress['phone'] ?? 'N/A' }}</p>
                                         </div>
                                     @else
                                         <p class="text-muted">No shipping address provided.</p>
@@ -259,8 +319,51 @@
                                         </tr>
                                         <tr>
                                             <th>Canceled Date</th>
-                                            <td colspan="3" style="color: red;">
+                                            <td class="text-danger">
                                                 {{ $order->canceled_at ? \Carbon\Carbon::parse($order->canceled_at)->format('d-M-y g:i a') : 'N/A' }}
+                                            </td>
+                                            <th>Order Status</th>
+                                            <td class="text-capitalize fs-4">
+                                                @php
+                                                    $orderStatus = $order->status;
+                                                @endphp
+
+                                                @if($orderStatus)
+                                                    @switch($orderStatus)
+                                                        @case('pending')
+                                                            <span class="badge badge-pill" style="background-color: #FF9800; color: #fff; font-weight: bold; font-size: 14px;">Pending</span>
+                                                            @break
+
+                                                        @case('confirmed')
+                                                            <span class="badge badge-pill" style="background-color: #2196F3; color: #fff; font-weight: bold; font-size: 14px;">Confirmed</span>
+                                                            @break
+
+                                                        @case('processing')
+                                                            <span class="badge badge-pill" style="background-color: #00BCD4; color: #fff; font-weight: bold; font-size: 14px;">Processing</span>
+                                                            @break
+
+                                                        @case('shipped')
+                                                            <span class="badge badge-pill" style="background-color: #9E9E9E; color: #fff; font-weight: bold; font-size: 14px;">Shipped</span>
+                                                            @break
+
+                                                        @case('delivered')
+                                                            <span class="badge badge-pill" style="background-color: #4CAF50; color: #fff; font-weight: bold; font-size: 14px;">Delivered</span>
+                                                            @break
+
+                                                        @case('canceled')
+                                                            <span class="badge badge-pill" style="background-color: #F44336; color: #fff; font-weight: bold; font-size: 14px;">Canceled</span>
+                                                            @break
+
+                                                        @case('refunded')
+                                                            <span class="badge badge-pill" style="background-color: #607D8B; color: #fff; font-weight: bold; font-size: 14px;">Refunded</span>
+                                                            @break
+
+                                                        @default
+                                                            <span class="badge badge-pill" style="background-color: #BDBDBD; color: #fff; font-weight: bold; font-size: 14px;">Unknown</span>
+                                                    @endswitch
+                                                @else
+                                                    <span class="badge badge-pill" style="background-color: #BDBDBD; color: #fff; font-weight: bold; font-size: 14px;">No Status</span>
+                                                @endif
                                             </td>
                                         </tr>
                                         </tbody>
@@ -331,3 +434,26 @@
         </section>
     </main>
 @endsection
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        function confirmCancelOrder() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Canceling this order cannot be undone. Do you want to proceed?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#0c8158',
+                confirmButtonText: 'Yes, cancel it!',
+                cancelButtonText: 'No, keep it',
+                focusCancel: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('cancel_order_form').submit();
+                }
+            });
+        }
+    </script>
+@endpush

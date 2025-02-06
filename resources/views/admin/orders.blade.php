@@ -49,7 +49,7 @@
                                     <th class="text-center">Payment Status</th>
                                     <th class="text-center">Order Date</th>
                                     <th class="text-center">Total Items</th>
-                                    <th class="text-center">Delivered On</th>
+                                    <th class="text-center">Delivered</th>
                                     <th class="text-center">Canceled!</th>
                                     <th class="text-center">Action</th>
                                 </tr>
@@ -69,7 +69,7 @@
                                     <td class="text-center">{{ $order->created_at->format('d-M-y g:i a') }}</td>
                                     <td class="text-center">{{ $order->items->count() }}</td>
                                     <td class="text-center">
-                                        <span class="badge {{ $order->delivered_at ? 'bg-danger' : 'bg-success' }} p-2">
+                                        <span class="badge {{ $order->delivered_at ? 'bg-success' : 'bg-danger' }} p-2">
                                             {{ $order->delivered_at ? 'Yes' : 'No' }}
                                         </span>
                                     </td>

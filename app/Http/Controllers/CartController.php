@@ -222,7 +222,8 @@ class CartController extends Controller
             return redirect()->back()->with('error', 'Your cart is empty.');
         }
         $order = new Order();
-        $order->order_number = 'ORD-' . strtoupper(uniqid());
+//        $order->order_number = 'ORD-' . strtoupper(uniqid());
+        $order->order_number = 'ORD-' . str_pad(Order::max('id') + 1, 4, '0', STR_PAD_LEFT); // Generate order number based on the next id
         $order->user_id = $user->id;
         $order->subtotal = $checkoutData['subtotal'];
         $order->discount = $checkoutData['discount'];

@@ -4,7 +4,99 @@
         .table-transaction>tbody>tr:nth-of-type(odd) {
             --bs-table-accent-bg: #fff !important;
         }
+         .btn-gradient-main {
+             background: linear-gradient(45deg, #007bff 0%, #0056b3 100%);
+             color: white;
+             border: none;
+             text-transform: uppercase;
+         }
 
+        .btn-gradient-main:hover {
+            background: linear-gradient(45deg, #0056b3 0%, #004085 100%);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .form-control {
+            border: 4px solid #f0f0f0;
+            padding: 18px 20px;
+            border-radius: 12px;
+            background: #dfecff;
+            font-size: 16px;
+            transition: border 0.4s ease, background-color 0.4s ease;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+        }
+
+        .wg-box {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        h5 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: #333;
+        }
+
+        .btn-lg {
+            padding: 15px 30px;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        /* Icon styling */
+        .btn-gradient-main i {
+            margin-right: 10px;
+        }
+
+        /* Adjust the title size */
+        .swal2-popup .swal2-title {
+            font-size: 24px;  /* Title font size */
+            line-height: 5rem;
+        }
+
+        /* Adjust the body text size */
+        .swal2-popup .swal2-html-container {
+            font-size: 18px;  /* Body font size */
+        }
+
+        /* Adjust confirm button font size and overall size */
+        .swal2-popup .swal2-confirm {
+            font-size: 16px;  /* Button font size */
+            padding: 12px 24px;  /* Button padding (increase for larger button) */
+            font-weight: bold;  /* Optional: Make text bold */
+            border-radius: 15px;
+        }
+
+        /* Adjust cancel button font size and overall size */
+        .swal2-popup .swal2-cancel {
+            font-size: 16px;  /* Button font size */
+            padding: 12px 24px;  /* Button padding (increase for larger button) */
+            font-weight: bold;  /* Optional: Make text bold */
+            border-radius: 15px;
+        }
+        /* Increase the width of the popup box */
+        .swal2-popup {
+            width: 400px;  /* Set custom width */
+            max-width: 50%;  /* Make sure it is responsive */
+        }
+        /* Custom styling for the red circular icon */
+        .custom-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%; /* Makes it a circle */
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 @endpush
 @section('content')
@@ -35,6 +127,20 @@
                     <a class="tf-button style-1 w208" href="{{ route('admin.orders') }}">Back</a>
                 </div>
                 <div class="table-responsive">
+                    @if(Session::has('success'))
+                        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center fs-5 fw-bold" role="alert">
+                            <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                            <strong>{{ Session::get('success') }}</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @elseif(Session::has('error'))
+                        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center fs-5 fw-bold" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                            <strong>{{ Session::get('error') }}</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
@@ -69,6 +175,39 @@
                         @endforeach
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- Separate Form (Hidden) -->
+            <form action="{{ route('admin.order.status.update') }}" method="POST" id="update_status">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="order_id" value="{{ $order->id }}">
+                <input type="hidden" name="status" id="status_input"> <!-- Hidden input for status -->
+            </form>
+
+            <!-- Separate DIV with Elegant Design -->
+            <div class="wg-box p-5 rounded-4 shadow-lg" style="background: rgba(255,255,255,0.04); border-radius: 15px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
+                <h5 class="text-center mb-4 text-uppercase fw-bold text-dark" style="font-family: 'Roboto', sans-serif;">Update Order Status</h5>
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-md-6 col-lg-3">
+                        <select id="status_select" class="form-control fw-semibold" style="padding: 18px 20px; border-radius: 12px; border: 4px solid #c6ede7; background: #e7eef4; transition: all 0.4s ease; font-family: 'Roboto', sans-serif;" required>
+                            <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="confirmed" {{ $order->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                            <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing</option>
+                            <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                            <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                            <option value="canceled" {{ $order->status == 'canceled' ? 'selected' : '' }}>Canceled</option>
+                            <option value="refunded" {{ $order->status == 'refunded' ? 'selected' : '' }}>Refunded</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <button type="button" class="btn btn-lg btn-gradient-main fs-2 px-5 py-8 fw-bold w-100"
+                                onclick="confirmUpdateStatus()"
+                                style="padding: 18px 20px; transition: all 0.4s ease; border-radius: 12px; box-shadow: 0 6px 15px rgba(0, 123, 255, 0.25); font-family: 'Roboto', sans-serif;">
+                            <i class="fas fa-sync-alt"></i> Update Status
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -119,8 +258,54 @@
                                 <tr>
                                     <th>Payment Mode</th>
                                     <td class="text-capitalize">{{ optional($order->transaction)->gateway ?? 'N/A' }}</td>
-                                    <th>Status</th>
-                                    <td class="text-capitalize">{{ $order->payment_status }}</td>
+                                    <th>Payment Status</th>
+                                    <td class="text-capitalize">
+                                        @php
+                                            $transactionStatus = optional($order->transaction)->status;
+                                        @endphp
+
+                                        @if($transactionStatus)
+                                            @switch($transactionStatus)
+                                                @case('approved')
+                                                    <span class="badge bg-success">Approved</span>
+                                                    @break
+
+                                                @case('pending')
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                    @break
+
+                                                @case('completed')
+                                                    <span class="badge bg-primary">Completed</span>
+                                                    @break
+
+                                                @case('failed')
+                                                    <span class="badge bg-danger">Failed</span>
+                                                    @break
+
+                                                @case('refunded')
+                                                    <span class="badge bg-info">Refunded</span>
+                                                    @break
+
+                                                @case('partially_refunded')
+                                                    <span class="badge bg-secondary">Partially Refunded</span>
+                                                    @break
+
+                                                @case('disputed')
+                                                    <span class="badge bg-dark">Disputed</span>
+                                                    @break
+
+                                                @case('canceled')
+                                                    <span class="badge bg-danger">Canceled</span>
+                                                    @break
+
+                                                @default
+                                                    <span class="badge bg-light text-dark">Unknown</span>
+                                            @endswitch
+                                        @else
+                                            <span class="badge bg-light text-dark">No Transaction</span>
+                                        @endif
+                                    </td>
+
                                 </tr>
                                 <tr>
                                     <th>Order Date</th>
@@ -130,8 +315,51 @@
                                 </tr>
                                 <tr>
                                     <th>Canceled Date</th>
-                                    <td colspan="3" class="text-danger">
+                                    <td class="text-danger">
                                         {{ $order->canceled_at ? \Carbon\Carbon::parse($order->canceled_at)->format('d-M-y g:i a') : 'N/A' }}
+                                    </td>
+                                    <th>Order Status</th>
+                                    <td class="text-capitalize fs-4">
+                                        @php
+                                            $orderStatus = $order->status;
+                                        @endphp
+
+                                        @if($orderStatus)
+                                            @switch($orderStatus)
+                                                @case('pending')
+                                                    <span class="badge badge-pill" style="background-color: #FF9800; color: #fff; font-weight: bold; font-size: 14px;">Pending</span>
+                                                    @break
+
+                                                @case('confirmed')
+                                                    <span class="badge badge-pill" style="background-color: #2196F3; color: #fff; font-weight: bold; font-size: 14px;">Confirmed</span>
+                                                    @break
+
+                                                @case('processing')
+                                                    <span class="badge badge-pill" style="background-color: #00BCD4; color: #fff; font-weight: bold; font-size: 14px;">Processing</span>
+                                                    @break
+
+                                                @case('shipped')
+                                                    <span class="badge badge-pill" style="background-color: #9E9E9E; color: #fff; font-weight: bold; font-size: 14px;">Shipped</span>
+                                                    @break
+
+                                                @case('delivered')
+                                                    <span class="badge badge-pill" style="background-color: #4CAF50; color: #fff; font-weight: bold; font-size: 14px;">Delivered</span>
+                                                    @break
+
+                                                @case('canceled')
+                                                    <span class="badge badge-pill" style="background-color: #F44336; color: #fff; font-weight: bold; font-size: 14px;">Canceled</span>
+                                                    @break
+
+                                                @case('refunded')
+                                                    <span class="badge badge-pill" style="background-color: #607D8B; color: #fff; font-weight: bold; font-size: 14px;">Refunded</span>
+                                                    @break
+
+                                                @default
+                                                    <span class="badge badge-pill" style="background-color: #BDBDBD; color: #fff; font-weight: bold; font-size: 14px;">Unknown</span>
+                                            @endswitch
+                                        @else
+                                            <span class="badge badge-pill" style="background-color: #BDBDBD; color: #fff; font-weight: bold; font-size: 14px;">No Status</span>
+                                        @endif
                                     </td>
                                 </tr>
                                 </tbody>
@@ -200,3 +428,32 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <!-- SweetAlert Integration for Confirmation -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmUpdateStatus() {
+            const status = document.getElementById('status_select').value;
+            const statusText = document.getElementById('status_select').options[document.getElementById('status_select').selectedIndex].text;
+
+            Swal.fire({
+                title: `Change status to ${statusText}?`,
+                html: `Do you really want to update the status to <b style="color: red;">${statusText}</b> ?`, // Bold & Red
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#079573',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Update it!',
+                cancelButtonText: 'No, Cancel',
+                focusCancel: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If confirmed, update the hidden input and submit the form
+                    document.getElementById('status_input').value = status;
+                    document.getElementById('update_status').submit();
+                }
+            });
+        }
+    </script>
+@endpush

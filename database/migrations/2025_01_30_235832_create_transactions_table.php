@@ -25,6 +25,7 @@ return new class extends Migration
 
             // Status tracking
             $table->enum('status', [
+                'approved',
                 'pending',
                 'completed',
                 'failed',

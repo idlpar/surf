@@ -96,7 +96,17 @@
                     <div class="wg-table table-all-user">
                         <div class="table-responsive">
                             @if(Session::has('success'))
-                                <p class="alert alert-success">{{ Session::get('success') }}</p>
+                                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center fs-5 fw-bold" role="alert">
+                                    <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                                    <strong>{{ Session::get('success') }}</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @elseif(Session::has('error'))
+                                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center fs-5 fw-bold" role="alert">
+                                    <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                                    <strong>{{ Session::get('error') }}</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
                             @endif
                             <table class="table table-striped table-bordered">
                                 <thead>
@@ -177,7 +187,8 @@
                     text: 'swal-text',
                     confirmButton: 'swal2-confirm',
                     cancelButton: 'swal2-cancel'
-                }
+                },
+                focusCancel: true
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById(formId).submit();

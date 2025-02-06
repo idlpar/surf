@@ -190,7 +190,8 @@
                     text: 'swal-text',
                     confirmButton: 'swal2-confirm',
                     cancelButton: 'swal2-cancel'
-                }
+                },
+                focusCancel: true
         }).then((result) => {
                 if (result.isConfirmed) {
                     // Submit the form dynamically

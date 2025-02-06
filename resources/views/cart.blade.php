@@ -163,10 +163,18 @@
                         </form>
                     </div>
                     <div>
-                        @if( Session::has('success'))
-                            <p style="color: #0f5132;">{{ Session::get('success') }}</p>
+                        @if(Session::has('success'))
+                            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center fs-5 fw-bold" role="alert">
+                                <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                                <strong>{{ Session::get('success') }}</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
                         @elseif(Session::has('error'))
-                        <p class="text-danger">{{ Session::has('error')}}</p>
+                            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center fs-5 fw-bold" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                                <strong>{{ Session::get('error') }}</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
                         @endif
                     </div>
                 </div>

@@ -1,104 +1,5 @@
 @extends('layouts.app')
 
-@push('styles')
-    <style>
-        .order-table {
-            --table-accent-bg: transparent;
-            --table-border-color: rgba(255,255,255,0.1);
-            border-collapse: separate;
-            border-spacing: 0 8px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .order-table th {
-            background: linear-gradient(45deg, #6a6e51 0%, #4d503a 100%);
-            color: #fff;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: none;
-            position: relative;
-            padding: 1rem 1.5rem !important;
-        }
-
-        .order-table th:first-child {
-            border-radius: 12px 0 0 12px;
-        }
-
-        .order-table th:last-child {
-            border-radius: 0 12px 12px 0;
-        }
-
-        .order-table td {
-            padding: 1.25rem 1.5rem !important;
-            background: rgba(255,255,255,0.9);
-            transition: all 0.3s ease;
-        }
-
-        .order-table tr:nth-child(even) td {
-            background: rgba(245, 247, 250, 0.9);
-        }
-
-        .order-table tr:hover td {
-            background: rgba(255,255,255,1);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(106, 110, 81, 0.1);
-        }
-
-        .status-badge {
-            padding: 0.35rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .bg-success {
-            background: linear-gradient(45deg, #40c710 0%, #32a80d 100%);
-            color: white !important;
-        }
-        .bg-danger {
-            background: linear-gradient(45deg, #f44032 0%, #d1372b 100%);
-            color: white !important;
-        }
-        .bg-warning {
-            background: linear-gradient(45deg, #f5d700 0%, #e0c300 100%);
-            color: #000 !important;
-        }
-
-        .view-icon {
-            transition: all 0.3s ease;
-            color: #6a6e51;
-            background: rgba(106, 110, 81, 0.1);
-            padding: 8px;
-            border-radius: 8px;
-        }
-
-        .view-icon:hover {
-            color: #ffffff;
-            background: #6a6e51;
-            transform: rotate(-5deg) scale(1.1);
-        }
-
-        .product-image {
-            width: 45px;
-            height: 45px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .product-image:hover {
-            transform: scale(1.1);
-        }
-
-    </style>
-@endpush
-
 @section('content')
     <main class="pt-90" style="padding-top: 0px;">
         <div class="mb-4 pb-4"></div>
@@ -113,18 +14,18 @@
                     <div class="card shadow-sm">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-striped table-striped-columns table-hover order-table mb-0">
-                                    <thead>
+                                <table class="table table-striped table-hover table-bordered mb-0">
+                                    <thead class="table-dark">
                                     <tr>
-                                        <th>Order #</th>
-                                        <th>Date</th>
-                                        <th class="text-center">Products</th>
-                                        <th class="text-center">Items</th>
-                                        <th class="text-center">Subtotal</th>
-                                        <th class="text-center">Tax</th>
-                                        <th class="text-end">Total</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Action</th>
+                                        <th style="width: 5%;">Order #</th>
+                                        <th style="width: 10%;">Date</th>
+                                        <th class="text-center" style="width: 25%;">Products</th>
+                                        <th class="text-center" style="width: 5%;">Items</th>
+                                        <th class="text-center" style="width: 10%;">Subtotal</th>
+                                        <th class="text-center" style="width: 10%;">Tax</th>
+                                        <th class="text-end" style="width: 10%;">Total</th>
+                                        <th class="text-center" style="width: 10%;">Status</th>
+                                        <th class="text-center" style="width: 5%;">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -133,19 +34,19 @@
                                             <!-- Order Number -->
                                             <td>#{{ $order->order_number }}</td>
 
-                                            <!-- Order Date (formatted date and time) -->
+                                            <!-- Order Date -->
                                             <td>
                                                 {{ $order->created_at->format('M d, Y') }}<br>
                                                 <small class="text-muted">{{ $order->created_at->format('h:i A') }}</small>
                                             </td>
 
-                                            <!-- Items Names -->
+                                            <!-- Products -->
                                             <td class="text-start">
                                                 @foreach($order->items as $item)
                                                     <div class="d-flex align-items-center gap-2 mb-1">
                                                         <img src="{{ asset('uploads/products/' . $item->product->image) }}"
                                                              alt="{{ $item->product->name }}"
-                                                             style="width: 40px; height: 40px; object-fit: cover">
+                                                             class="img-fluid rounded-circle" style="width: 40px; height: 40px;">
                                                         <div>
                                                             {{ $item->product->name }}
                                                             <div class="text-muted small">Qty: {{ $item->quantity }}</div>
@@ -153,6 +54,7 @@
                                                     </div>
                                                 @endforeach
                                             </td>
+
                                             <!-- Items Count -->
                                             <td class="text-center">{{ $order->items->count() }}</td>
 
@@ -167,27 +69,60 @@
 
                                             <!-- Status -->
                                             <td class="text-center">
-                                                @if($order->canceled_at)
-                                                    <span class="status-badge bg-danger">Canceled</span>
-                                                @elseif($order->delivered_at)
-                                                    <span class="status-badge bg-success">Delivered</span>
+                                                @php
+                                                    $orderStatus = $order->status;
+                                                @endphp
+
+                                                @if($orderStatus)
+                                                    @switch($orderStatus)
+                                                        @case('pending')
+                                                            <span class="badge badge-pill" style="background-color: #FF9800; color: #fff; font-weight: bold; font-size: 14px;">Pending</span>
+                                                            @break
+
+                                                        @case('confirmed')
+                                                            <span class="badge badge-pill" style="background-color: #2196F3; color: #fff; font-weight: bold; font-size: 14px;">Confirmed</span>
+                                                            @break
+
+                                                        @case('processing')
+                                                            <span class="badge badge-pill" style="background-color: #00BCD4; color: #fff; font-weight: bold; font-size: 14px;">Processing</span>
+                                                            @break
+
+                                                        @case('shipped')
+                                                            <span class="badge badge-pill" style="background-color: #9E9E9E; color: #fff; font-weight: bold; font-size: 14px;">Shipped</span>
+                                                            @break
+
+                                                        @case('delivered')
+                                                            <span class="badge badge-pill" style="background-color: #4CAF50; color: #fff; font-weight: bold; font-size: 14px;">Delivered</span>
+                                                            @break
+
+                                                        @case('canceled')
+                                                            <span class="badge badge-pill" style="background-color: #F44336; color: #fff; font-weight: bold; font-size: 14px;">Canceled</span>
+                                                            @break
+
+                                                        @case('refunded')
+                                                            <span class="badge badge-pill" style="background-color: #607D8B; color: #fff; font-weight: bold; font-size: 14px;">Refunded</span>
+                                                            @break
+
+                                                        @default
+                                                            <span class="badge badge-pill" style="background-color: #BDBDBD; color: #fff; font-weight: bold; font-size: 14px;">Unknown</span>
+                                                    @endswitch
                                                 @else
-                                                    <span class="status-badge bg-warning">{{ ucfirst($order->payment_status) }}</span>
+                                                    <span class="badge badge-pill" style="background-color: #BDBDBD; color: #fff; font-weight: bold; font-size: 14px;">No Status</span>
                                                 @endif
                                             </td>
 
-                                            <!-- Action (View Details Link) -->
+
+                                            <!-- Action -->
                                             <td class="text-center">
                                                 <a href="{{ route('user.order.details', ['order_id' => $order->id]) }}"
-                                                   class="text-decoration-none text-dark"
-                                                   title="View Details">
-                                                    <i class="fas fa-eye view-icon"></i>
+                                                   class="btn btn-outline-dark btn-sm" title="View Details">
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center py-4">
+                                            <td colspan="9" class="text-center py-4">
                                                 <div class="text-muted">No orders found</div>
                                                 <a href="{{ route('shop.index') }}" class="btn btn-primary mt-3">
                                                     Start Shopping
@@ -202,10 +137,42 @@
                     </div>
 
                     @if($orders instanceof \Illuminate\Pagination\LengthAwarePaginator && $orders->hasPages())
-                        <div class="mt-4">
-                            {{ $orders->links() }}
+                        <div class="mt-4 d-flex justify-content-center">
+                            <nav aria-label="Order Pagination">
+                                <ul class="pagination pagination-sm">
+                                    {{-- Previous Page Link --}}
+                                    @if ($orders->onFirstPage())
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&laquo; Previous</span>
+                                        </li>
+                                    @else
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $orders->previousPageUrl() }}" rel="prev">&laquo; Previous</a>
+                                        </li>
+                                    @endif
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($orders->getUrlRange(1, $orders->lastPage()) as $page => $url)
+                                        <li class="page-item {{ $page == $orders->currentPage() ? 'active' : '' }}">
+                                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                        </li>
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    @if ($orders->hasMorePages())
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $orders->nextPageUrl() }}" rel="next">Next &raquo;</a>
+                                        </li>
+                                    @else
+                                        <li class="page-item disabled">
+                                            <span class="page-link">Next &raquo;</span>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </nav>
                         </div>
                     @endif
+
                 </div>
             </div>
         </section>

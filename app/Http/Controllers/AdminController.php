@@ -8,6 +8,7 @@ use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Slide;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
@@ -581,7 +582,7 @@ class AdminController extends Controller
         $extension = $image->getClientOriginalExtension();
         $fileName = $baseName . '.' . $extension;
 
-        $destinationPath = public_path('uploads/' . $folder);
+        $destinationPath = public_path('uploads' . DIRECTORY_SEPARATOR . $folder);
 
         // Ensure the directory exists
         if (!File::exists($destinationPath)) {
@@ -855,6 +856,180 @@ class AdminController extends Controller
         return view('admin.order-details', compact('orders', 'order'));
     }
 
+    public function update_order_status(Request $request)
+    {
+
+
+        $a = $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'status' => 'required|in:pending,confirmed,processing,shipped,delivered,canceled,refunded',
+        ]);
+
+        $order = Order::findOrFail($request->order_id);
+        $order->status = $request->status;
+        $order->canceled_at = null;
+        $order->delivered_at = null;
+
+        // If status is 'canceled', update canceled_at timestamp
+        if ($request->status == 'canceled') {
+            $order->canceled_at = Carbon::now();
+        }
+
+        // If status is 'delivered', update delivered_at timestamp
+        if ($request->status == 'delivered') {
+            $order->delivered_at = Carbon::now();
+        }
+
+        $order->save();
+
+        // Update transaction status if the order is delivered
+        if ($request->status == 'delivered') {
+            $transaction = Transaction::where('order_id', $request->order_id)->first();
+            if ($transaction) {
+                $transaction->status = 'approved';
+                $transaction->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Order status updated successfully.');
+    }
+
+    public function slides()
+    {
+        $slides = Slide::latest()->paginate(12);
+        return view('admin.slides', compact('slides'));
+    }
+
+    public function slide_add()
+    {
+        return view('admin.slide-add');
+    }
+
+    public function slide_store(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'tagline' => 'required|string|max:100',
+            'title' => 'required|string|max:100',
+            'subtitle' => 'nullable|string|max:200',
+            'link' => 'nullable|string|max:500|url',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Main image validation
+            'status' => 'required|boolean',
+        ]);
+
+        try {
+            // Create new slide instance
+            $slide = new Slide();
+            $slide->tagline = $request->tagline;
+            $slide->title = $request->title;
+            $slide->subtitle = $request->subtitle;
+            $slide->link = $request->link;
+            $slide->status = $request->status;
+
+            // Handle main image upload with resizing
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $slide->image = $this->processAndSaveImage($image, 'slides', 300, 300); // Resize for the slider
+            }
+
+            // Handle slide order
+            $slide->order = Slide::max('order') + 1; // Increment the order for new slide
+            $slide->save();
+
+            return redirect()->route('admin.slides')->with('success', 'Slide has been added successfully.');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Slide creation failed: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+            ]);
+
+            return back()->withErrors([
+                'general' => 'An unexpected error occurred. Please try again.'
+            ])->withInput();
+        }
+    }
+
+    public function slide_edit($id)
+    {
+        $slide = Slide::findOrFail($id);
+        return view('admin.slide-edit', compact('slide'));
+    }
+
+    public function slide_update(Request $request, $id)
+    {
+        // Validate the request
+        $request->validate([
+            'tagline' => 'required|string|max:100',
+            'title' => 'required|string|max:100',
+            'subtitle' => 'nullable|string|max:200',
+            'link' => 'nullable|string|max:500|url',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is optional for update
+            'status' => 'required|boolean',
+        ]);
+
+        try {
+            // Find the slide by ID
+            $slide = Slide::findOrFail($id);
+
+            // Update the slide's basic fields
+            $slide->tagline = $request->tagline;
+            $slide->title = $request->title;
+            $slide->subtitle = $request->subtitle;
+            $slide->link = $request->link;
+            $slide->status = $request->status;
+
+            // Handle image upload if a new one is provided
+            if ($request->hasFile('image')) {
+                // Process and save the new image
+                $image = $request->file('image');
+                $slide->image = $this->processAndSaveImage($image, 'slides', 300, 300); // Resize and save the image
+            }
+
+            // Save the updated slide
+            $slide->save();
+
+            return redirect()->route('admin.slides')->with('success', 'Slide has been updated successfully.');
+
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Slide update failed: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+            ]);
+
+            return back()->withErrors([
+                'general' => 'An unexpected error occurred. Please try again.'
+            ])->withInput();
+        }
+    }
+
+    public function slide_delete($id)
+    {
+        try {
+            // Find the slide or throw a 404 error if not found
+            $slide = Slide::findOrFail($id);
+
+            // Delete the main image if it exists
+            if ($slide->image) {
+                $imagePath = public_path('uploads/slides/' . $slide->image);
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+            }
+
+            // Delete the slide record from the database
+            $slide->delete();
+
+            // Redirect to the slides list with a success message
+            return redirect()->route('admin.slides')->with('success', 'Slide has been deleted successfully.');
+
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Slide deletion failed: ' . $e->getMessage(), ['slide_id' => $id]);
+
+            // Redirect back with an error message
+            return redirect()->route('admin.slides')->withErrors('Failed to delete slide. Please try again.');
+        }
+    }
 
 }
 
