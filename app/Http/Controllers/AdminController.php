@@ -11,6 +11,8 @@ use App\Models\Product;
 use App\Models\Slide;
 use App\Models\Transaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -21,11 +23,56 @@ use Surfsidemedia\Shoppingcart\Facades\Cart;
 
 class AdminController extends Controller
 {
-    // Brands
     public function index()
     {
-        return view('admin.index');
+        // Eager load user and items, selecting only necessary columns
+        $orders = Order::with(['user:id,name,mobile', 'items'])
+            ->latest()
+            ->take(10)
+            ->get([
+                'id', 'user_id', 'subtotal', 'tax', 'shipping_cost', 'total',
+                'payment_status', 'created_at', 'delivered_at', 'canceled_at'
+            ]);
+
+        // Cache aggregated dashboard data for 5 minutes
+        $dashboardData = Cache::remember('dashboard_data', now()->addMinutes(5), function () {
+            return Order::selectRaw('
+            SUM(total) as Total,
+            SUM(CASE WHEN status = "pending" THEN total ELSE 0 END) as TotalPendingAmount,
+            SUM(CASE WHEN status = "delivered" THEN total ELSE 0 END) as TotalDeliveredAmount,
+            SUM(CASE WHEN status = "canceled" THEN total ELSE 0 END) as TotalCanceledAmount,
+            COUNT(*) as TotalCount,
+            SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) as TotalPending,
+            SUM(CASE WHEN status = "delivered" THEN 1 ELSE 0 END) as TotalDelivered,
+            SUM(CASE WHEN status = "canceled" THEN 1 ELSE 0 END) as TotalCanceled
+        ')->first();
+        });
+
+        // Optimized Monthly Data Query with Proper JOIN
+        $monthlyData = DB::select("
+        SELECT M.id AS MonthNo, M.name AS MonthName,
+            COALESCE(D.TotalAmount, 0) AS TotalAmount,
+            COALESCE(D.TotalPendingAmount, 0) AS TotalPendingAmount,
+            COALESCE(D.TotalDeliveredAmount, 0) AS TotalDeliveredAmount,
+            COALESCE(D.TotalCanceledAmount, 0) AS TotalCanceledAmount
+        FROM months M
+        LEFT JOIN (
+            SELECT MONTH(created_at) AS MonthNo,
+                SUM(total) AS TotalAmount,
+                SUM(CASE WHEN status = 'pending' THEN total ELSE 0 END) AS TotalPendingAmount,
+                SUM(CASE WHEN status = 'delivered' THEN total ELSE 0 END) AS TotalDeliveredAmount,
+                SUM(CASE WHEN status = 'canceled' THEN total ELSE 0 END) AS TotalCanceledAmount
+            FROM orders
+            WHERE YEAR(created_at) = YEAR(NOW())
+            GROUP BY MONTH(created_at)
+        ) D ON D.MonthNo = M.id
+        ORDER BY M.id
+    ");
+
+
+        return view('admin.index', compact('orders', 'dashboardData', 'monthlyData'));
     }
+
     public function brands()
     {
         $brands = Brand::orderBy('id', 'desc')->paginate(10);
