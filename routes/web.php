@@ -90,10 +90,12 @@ Route::post('password/otp/verify', [OtpController::class, 'verifyPasswordResetOt
 // Home Route
 //Auth::routes();
 //Route::redirect('/', '/home');
-Route::get('/', [HomeController::class, 'index'])->name('home');
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop.index'); // Show all products
+Route::get('/shop/category/{category}', [ShopController::class, 'index'])->name('shop.category'); // Show products by category slug
 Route::get('/shop/{product_slug}', [ShopController::class, 'product_details'])->name('shop.product.details');
+
 
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -114,14 +116,19 @@ Route::delete('/wishlist/clear', [WishlistController::class, 'empty_wishlist'])-
 Route::post('/wishlist/move-to-cart/{rowId}', [WishlistController::class, 'move_to_cart'])->name('wishlist.move.to.cart');
 
 Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-Route::post('/checkout/place-order', [CartController::class, 'place_and_order'])->name('cart.place.order');
+Route::post('/place-an-order', [CartController::class, 'place_an_order'])->name('cart.place.order');
 Route::get('/order-confirmation', [CartController::class, 'order_confirmation'])->name('cart.order.confirmation');
 
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::post('/contact', [HomeController::class, 'send_contact'])->name('contact.send');
+
+Route::get('/search', [HomeController::class, 'search'])->name('home.search');
+
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
-    Route::get('/user-orders', [UserController::class, 'orders'])->name('user.orders');
-    Route::get('/user/{order_id}/order', [UserController::class, 'order_details'])->name('user.order.details');
-    Route::post('/user/{order_id}/cancel', [UserController::class, 'cancel_order'])->name('user.cancel.order');
+    Route::get('/account', [UserController::class, 'index'])->name('user.dashboard');
+    Route::get('/account-orders', [UserController::class, 'orders'])->name('user.orders');
+    Route::get('/account/{order_id}/order', [UserController::class, 'order_details'])->name('user.order.details');
+    Route::post('/account/{order_id}/cancel', [UserController::class, 'cancel_order'])->name('user.cancel.order');
 });
 
 Route::middleware(['auth', AuthAdmin::class])->group(function () {
@@ -129,7 +136,7 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
     Route::get('/admin/brands', [AdminController::class, 'brands'])->name('admin.brands');
     Route::get('/admin/brands/add', [AdminController::class, 'brand_add'])->name('admin.brand.add');
     Route::post('/admin/brands/store', [AdminController::class, 'brand_store'])->name('admin.brand.store');
-    Route::get('/admin/brands/edit/{id}', [AdminController::class, 'brand_edit'])->name('admin.brand.edit');
+    Route::get('/admin/brands/{id}/edit', [AdminController::class, 'brand_edit'])->name('admin.brand.edit');
     Route::post('/admin/brands/update', [AdminController::class, 'brand_update'])->name('admin.brand.update');
     Route::delete('/admin/brands/{id}/delete', [AdminController::class, 'brand_delete'])->name('admin.brand.delete');
 
@@ -165,6 +172,12 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
     Route::get('/admin/slides/{id}/edit', [AdminController::class, 'slide_edit'])->name('admin.slide.edit');
     Route::put('/admin/slides/{id}/update', [AdminController::class, 'slide_update'])->name('admin.slide.update');
     Route::delete('/admin/slides/{id}/delete', [AdminController::class, 'slide_delete'])->name('admin.slide.delete');
+
+    Route::get('/admin/contacts', [AdminController::class, 'contacts'])->name('admin.contacts');
+    Route::get('/admin/contact/{id}/view', [AdminController::class, 'message_read'])->name('admin.contact.read');
+    Route::delete('/admin/contact/{id}/delete}', [AdminController::class, 'message_delete'])->name('admin.contact.delete');
+    Route::delete('/admin/contacts/delete-multiple', [AdminController::class, 'deleteMultiple'])->name('admin.contacts.deleteMultiple');
+
 });
 
 // Social Login Routes

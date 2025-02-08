@@ -187,7 +187,7 @@ class CartController extends Controller
         return view('checkout', compact('address'));
     }
 
-    public function place_and_order(Request $request)
+    public function place_an_order(Request $request)
     {
         $user = Auth::user();
 

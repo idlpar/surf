@@ -3326,7 +3326,7 @@ progress {
   color: #f7f3d7 !important; }
 
 .text-danger {
-  color: #ecc8c5 !important; }
+  color: #FF0000 !important; }
 
 .text-light {
   color: #e4e4e4 !important; }
@@ -9317,8 +9317,8 @@ img {
 .form-control {
   display: block;
   width: 100%;
-  padding: 0.9375rem 0.9375rem 0.75rem;
-  font-size: 0.875rem;
+  padding: 0 1.875rem !important;
+  font-size: 1.25rem;
   font-weight: 400;
   line-height: 1.7143;
   color: #222222;
@@ -9391,7 +9391,8 @@ img {
     letter-spacing: 0.18em; }
 
 .form-control_gray {
-  border-color: #e4e4e4; }
+  border-color: #e4e4e4;
+  padding-top: 1.5rem !important;}
 
 .form-control-plaintext {
   display: block;
@@ -9723,6 +9724,8 @@ textarea.form-control-lg {
     padding: 1.125rem 1.3125rem 0.9rem; }
   .form-floating > label {
     position: absolute;
+    vertical-align: middle;
+    height: unset !important;
     top: 1rem;
     left: 0.75rem;
     padding: 0 0.5rem;

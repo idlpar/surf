@@ -24,7 +24,7 @@
                         <a href="about.html" class="navigation__link">About</a>
                     </li>
                     <li class="navigation__item">
-                        <a href="contact.html" class="navigation__link">Contact</a>
+                        <a href="{{ route('contact') }}" class="navigation__link">Contact</a>
                     </li>
                 </ul>
             </nav>
@@ -45,8 +45,7 @@
                         <form action="#" method="GET" class="search-field container">
                             <p class="text-uppercase text-secondary fw-medium mb-4">What are you looking for?</p>
                             <div class="position-relative">
-                                <input class="search-field__input search-popup__input w-100 fw-medium" type="text"
-                                       name="search-keyword" placeholder="Search products" />
+                                <input class="search-field__input search-popup__input w-100 fw-medium" type="text" name="search-keyword" id="search-input" placeholder="Search products" />
                                 <button class="btn-icon search-popup__submit" type="submit">
                                     <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -59,14 +58,7 @@
                             <div class="search-popup__results">
                                 <div class="sub-menu search-suggestion">
                                     <h6 class="sub-menu__title fs-base">Quicklinks</h6>
-                                    <ul class="sub-menu__list list-unstyled">
-                                        <li class="sub-menu__item"><a href="shop2.html" class="menu-link menu-link_us-s">New Arrivals</a>
-                                        </li>
-                                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Dresses</a></li>
-                                        <li class="sub-menu__item"><a href="shop3.html" class="menu-link menu-link_us-s">Accessories</a>
-                                        </li>
-                                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Footwear</a></li>
-                                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Sweatshirt</a></li>
+                                    <ul id="box-content-search">
                                     </ul>
                                 </div>
 

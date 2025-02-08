@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $category = null)
     {
         // Default query parameters
         $size = $request->query('size', 12);
@@ -45,6 +45,11 @@ class ShopController extends Controller
         ];
 
         [$o_column, $o_order] = $sortOptions[$order] ?? ['sale_price', 'asc'];
+
+        if ($category) {
+            $categoryData = Category::where('slug', $category)->firstOrFail();
+            $category_ids = [$categoryData->id]; // Override category filter with slug-based category
+        }
 
         // Fetch products with filters and sorting
         $products = Product::when($brand_ids, function ($query) use ($brand_ids) {

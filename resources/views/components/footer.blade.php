@@ -107,7 +107,7 @@
 
 <div class="footer-bottom">
     <div class="container d-md-flex align-items-center">
-        <span class="footer-copyright me-auto">TARPOR | All Right Reserved © 2024</span>
+        <span class="footer-copyright me-auto">TARPOR | All Right Reserved © {{ date('Y') }}</span>
         <div class="footer-settings d-md-flex align-items-center">
             <a href="privacy-policy.html">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms-conditions.html">Terms &amp;
                 Conditions</a>
@@ -151,14 +151,69 @@
 @endif
 
 <!-- JavaScript Files -->
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+{{--<script src="https://kit.fontawesome.com/83006b2a72.js" crossorigin="anonymous"></script>--}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="{{ asset('js/plugins/jquery.min.js') }}"></script>
 {{--<script src="{{ asset('js/plugins/bootstrap.bundle.min.js') }}"></script>--}}
 <script src="{{ asset('js/plugins/bootstrap-slider.min.js') }}"></script>
 <script src="{{ asset('js/plugins/swiper.min.js') }}"></script>
 <script src="{{ asset('js/plugins/countdown.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $("#search-input").on("keyup", function () {
+            var searchQuery = $(this).val().trim();
+
+            if (searchQuery.length > 2) {
+                $.ajax({
+                    type: "GET",
+                    url: window.location.origin + "/search", // Ensure the correct dynamic URL
+                    data: { query: searchQuery },
+                    dataType: "json",
+                    success: function (data) {
+                        $("#box-content-search").html(''); // Clear previous results
+
+                        if (data.length > 0) {
+                            $.each(data, function (index, item) {
+                                var link = `/product/${encodeURIComponent(item.slug)}`;
+                                var price = item.price ? `<span class="snize-price snize-price-with-discount">${item.price}</span>` : '<span class="snize-price">Price not available</span>';
+
+                                // Append each result with an image, name, category, and price
+                                $("#box-content-search").append(`
+                            <li class="snize-item clearfix">
+                                <span class="snize-thumbnail">
+                                    <img src="/uploads/products/${item.image}" alt="${item.name}" class="snize-item-image" style="max-width:70px;max-height:70px;">
+                                </span>
+                                <span class="snize-overhidden">
+                                    <span class="snize-title">${item.name}</span>
+                                    <span class="snize-description">${item.category}</span>
+                                    <div class="snize-price-list">
+                                        ${price}
+                                        <br>
+                                        <span class="fs-text" data-bs-toggle="tooltip" data-bs-placement="top" title="Discount on Special Price for Ecommerce order only">Save on online order</span>
+                                    </div>
+                                </span>
+                            </li>
+                        `);
+                            });
+                        } else {
+                            $("#box-content-search").html('<li class="text-muted">No results found.</li>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", xhr.responseText);
+                        $("#box-content-search").html('<li class="text-danger">Error fetching results.</li>');
+                    }
+                });
+            } else {
+                $("#box-content-search").html(''); // Clear results when input is empty
+            }
+        });
+    });
+
+</script>
+
+
 <script src="{{ asset('js/theme.js') }}"></script>
 
 @stack('scripts')
+

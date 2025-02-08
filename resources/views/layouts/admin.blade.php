@@ -20,7 +20,11 @@
     <link rel="apple-touch-icon-precomposed" href="{{ asset('images/favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/sweetalert.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/adm/custom.css') }}">
-{{--    <link rel="stylesheet" href="{{ asset('css/adm/fonts.css') }}">--}}
+    <!-- Latest FontAwesome CDN -->
+{{--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">--}}
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.7.2/css/all.css">
+
+    {{--    <link rel="stylesheet" href="{{ asset('css/adm/fonts.css') }}">--}}
     @stack('styles')
 
 
@@ -100,7 +104,7 @@
                             </li>
                             <li class="menu-item has-children">
                                 <a href="javascript:void(0);" class="menu-item-button">
-                                    <div class="icon"><i class="icon-layers"></i></div>
+                                    <div class="icon"><i class="icon-folder"></i></div>
                                     <div class="text">Category</div>
                                 </a>
                                 <ul class="sub-menu">
@@ -143,8 +147,14 @@
                             </li>
                             <li class="menu-item">
                                 <a href="{{ route('admin.coupons') }}" class="">
-                                    <div class="icon"><i class="icon-grid"></i></div>
+                                    <div class="icon"><i class="icon-tag"></i></div>
                                     <div class="text">Coupons</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('admin.contacts') }}" class="">
+                                    <div class="icon"><i class="icon-message-square"></i></div>
+                                    <div class="text">Message</div>
                                 </a>
                             </li>
 
@@ -323,7 +333,53 @@
 
                         </div>
                         <div class="header-grid">
-
+                            <div class="popup-wrap message type-header">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="messagesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span class="header-item">
+                                                <span class="text-tiny">1</span>
+                                                <i class="icon-mail"></i>
+                                            </span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="messagesDropdown">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Recent Messages <span class="badge bg-primary">5</span></h4>
+                                            <div class="card-actions">
+                                                <a href="#" class="text-small">View All</a>
+                                            </div>
+                                        </div>
+                                        <div class="list-group list-group-flush">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="message-item">
+                                                    <div class="image">
+                                                        <img src="user-avatar.jpg" class="avatar" alt="User">
+                                                    </div>
+                                                    <div class="content">
+                                                        <div class="body-title-2">Meeting Reminder</div>
+                                                        <div class="text-tiny text-muted">Tomorrow's meeting has been rescheduled...</div>
+                                                        <small class="text-muted">10 minutes ago</small>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="message-item">
+                                                    <div class="image">
+                                                        <i class="icon-alert"></i>
+                                                    </div>
+                                                    <div class="content">
+                                                        <div class="body-title-2">System Update</div>
+                                                        <div class="text-tiny text-muted">Scheduled maintenance tonight at 11PM...</div>
+                                                        <small class="text-muted">2 hours ago</small>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="card-footer">
+                                            <a href="#" class="btn btn-primary w-100">View All Messages</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="popup-wrap message type-header">
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -333,8 +389,7 @@
                                                 <i class="icon-bell"></i>
                                             </span>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end has-content"
-                                        aria-labelledby="dropdownMenuButton2">
+                                    <ul class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="dropdownMenuButton2">
                                         <li>
                                             <h6>Notifications</h6>
                                         </li>
@@ -390,9 +445,6 @@
                                     </ul>
                                 </div>
                             </div>
-
-
-
 
                             <div class="popup-wrap user type-header">
                                 <div class="dropdown">

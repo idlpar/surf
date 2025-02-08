@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -976,7 +977,7 @@ class AdminController extends Controller
             // Handle main image upload with resizing
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $slide->image = $this->processAndSaveImage($image, 'slides', 300, 300); // Resize for the slider
+                $slide->image = $this->processAndSaveImage($image, 'slides', 600, 800); // Resize for the slider
             }
 
             // Handle slide order
@@ -1029,7 +1030,7 @@ class AdminController extends Controller
             if ($request->hasFile('image')) {
                 // Process and save the new image
                 $image = $request->file('image');
-                $slide->image = $this->processAndSaveImage($image, 'slides', 300, 300); // Resize and save the image
+                $slide->image = $this->processAndSaveImage($image, 'slides', 600, 800); // Resize and save the image
             }
 
             // Save the updated slide
@@ -1077,6 +1078,43 @@ class AdminController extends Controller
             return redirect()->route('admin.slides')->withErrors('Failed to delete slide. Please try again.');
         }
     }
+
+    public function contacts()
+    {
+        $contacts = Contact::where('is_read', false)->latest()->paginate(12);
+        return view('admin.contacts', compact('contacts'));
+    }
+    public function message_read($id)
+    {
+        // Fetch the contact record
+        $contact = Contact::findOrFail($id); // Ensures only one record is fetched
+        // Update the `is_read` field
+        $contact->update(['is_read' => true]);
+
+        return view('admin.contact-view', compact('contact'))->with('success', 'Message marked as read.');
+    }
+
+
+    public function message_delete($id)
+    {
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+
+        return redirect()->route('admin.contacts')->with('success', 'Contact deleted successfully.');
+    }
+
+    public function deleteMultiple(Request $request)
+    {
+        $request->validate([
+            'selected_ids' => 'required|array',
+            'selected_ids.*' => 'exists:contacts,id',
+        ]);
+
+        Contact::whereIn('id', $request->selected_ids)->delete();
+
+        return redirect()->route('admin.contacts.index')->with('success', 'Selected messages deleted successfully!');
+    }
+
 
 }
 
